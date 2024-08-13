@@ -2,7 +2,6 @@ export default class User {
   private _id: number;
   private _username: string;
   private _password: string;
-  private _passwordConfirmation: string;
   private _email: string;
   private _name: string;
   private _profilePicture: string | null = null;
@@ -14,16 +13,14 @@ export default class User {
     id: number,
     username: string,
     password: string,
-    passwordConfirmation: string,
     email: string,
     name: string,
     role: string,
-    createdAt: Date,
+    createdAt: Date
   ) {
     this._id = id;
     this._username = username;
     this._password = password;
-    this._passwordConfirmation = passwordConfirmation;
     this._email = email;
     this._name = name;
     this._role = role;
@@ -52,14 +49,6 @@ export default class User {
 
   public set password(password: string) {
     this._password = password;
-  }
-
-  public get passwordConfirmation(): string {
-    return this._passwordConfirmation;
-  }
-
-  public set passwordConfirmation(passwordConfirmation: string) {
-    this._passwordConfirmation = passwordConfirmation;
   }
 
   public get email(): string {

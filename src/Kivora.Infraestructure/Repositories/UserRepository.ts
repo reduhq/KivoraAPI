@@ -1,11 +1,11 @@
-import { PrismaClient } from "@prisma/client";
-import User from "../../Kivora.Domain/Entities/User";
-import IUserRepository from "../../Kivora.Domain/Interfaces/IUserRepository";
-import { KivoraContext } from "../../Kivora.Domain/KivoraContext";
-import { injectable } from "inversify";
-import { plainToInstance } from "class-transformer";
-import UserCreateDTO from "../../Kivora.AppCore/DTO/UserDTO/UserCreateDTO";
-import UserUpdateDTO from "../../Kivora.AppCore/DTO/UserDTO/UserUpdateDTO";
+import { PrismaClient } from '@prisma/client';
+import User from '../../Kivora.Domain/Entities/User';
+import IUserRepository from '../../Kivora.Domain/Interfaces/IUserRepository';
+import { KivoraContext } from '../../Kivora.Domain/KivoraContext';
+import { injectable } from 'inversify';
+import { plainToInstance } from 'class-transformer';
+import UserCreateDTO from '../../Kivora.AppCore/DTO/UserDTO/UserCreateDTO';
+import UserUpdateDTO from '../../Kivora.AppCore/DTO/UserDTO/UserUpdateDTO';
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -17,8 +17,16 @@ export default class UserRepository implements IUserRepository {
   public async GetByUsername(username: string): Promise<User> {
     const user = await this.context.user.findFirst({
       where: {
-        username,
-      },
+        username
+      }
+    });
+    return plainToInstance(User, user);
+  }
+  public async GetByEmail(email: string): Promise<User> {
+    const user = await this.context.user.findFirst({
+      where: {
+        email
+      }
     });
     return plainToInstance(User, user);
   }
@@ -27,23 +35,21 @@ export default class UserRepository implements IUserRepository {
       data: {
         username: t.username,
         password: t.password,
-        passwordConfirmation: t.passwordConfirmation,
         email: t.email,
         name: t.name,
-        role: "ADMIN",
-      },
+        role: 'ADMIN'
+      }
     });
     return plainToInstance(User, userResponse);
   }
   Update(_t: UserUpdateDTO): Promise<User> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   Delete(_id: number): Promise<Boolean> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   public async GetAll(): Promise<User[]> {
     const usersResponse = await this.context.user.findMany();
     return plainToInstance(User, usersResponse);
   }
 }
-
