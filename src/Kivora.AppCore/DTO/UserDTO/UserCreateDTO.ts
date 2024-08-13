@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer";
-import { IsNotEmpty, IsString, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
 
 /**
  *  @swagger
@@ -26,4 +26,14 @@ export default class UserCreateDTO{
     @IsNotEmpty({message:"La contraseña no puede estar vacia"})
     @MinLength(8, {message:"La contraseña es muy corta"})
     password:string = ''
+
+    @Expose()
+    @IsEmail()
+    @IsNotEmpty({message: 'El Email no puede estar vacio'})
+    email:string = ''
+
+    @Expose()
+    @IsString({message: 'El nombre no puede estar vacio'})
+    @IsNotEmpty({message:'El nombre no puede estar vacio'})
+    name:string = ''
 }

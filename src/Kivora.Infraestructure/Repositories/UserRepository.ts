@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import User from "../../Kivora.Domain/Entities/User";
 import IUserRepository from "../../Kivora.Domain/Interfaces/IUserRepository";
-import { BarbershopContext } from "../../Kivora.Domain/KivoraContext";
+import { KivoraContext } from "../../Kivora.Domain/KivoraContext";
 import { injectable } from "inversify";
 import { plainToInstance } from "class-transformer";
 import UserCreateDTO from "../../Kivora.AppCore/DTO/UserDTO/UserCreateDTO";
@@ -12,7 +12,7 @@ export default class UserRepository implements IUserRepository{
     private context: PrismaClient
 
     constructor(){
-        this.context = BarbershopContext
+        this.context = KivoraContext
     }
     public async GetByUsername(username: string): Promise<User> {
         const user = await this.context.user.findFirst({
@@ -26,7 +26,10 @@ export default class UserRepository implements IUserRepository{
         const userResponse = await this.context.user.create({
             data:{
                 username: t.username,
-                password: t.password
+                password: t.password,
+                email: t.email,
+                name: t.name,
+                role: 'ADMIN'
             }
         })
         return plainToInstance(User, userResponse)

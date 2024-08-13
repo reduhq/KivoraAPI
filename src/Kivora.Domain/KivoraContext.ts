@@ -15,4 +15,4 @@ class PrismaSingleton {
 
 const db = PrismaSingleton.getInstance();
 
-export { db as BarbershopContext };
+export { db as KivoraContext };

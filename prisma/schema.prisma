@@ -13,8 +13,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ROLE{
+  ADMIN
+  CLIENT
+  BUSINESSMAN
+}
+
 model User{
   id Int @id @default(autoincrement())
   username String @unique
   password String @db.VarChar(60)
+  email String @unique
+  name String
+  profilePicture String?
+  phone String?
+  role ROLE
+  createdAt DateTime @default(now())
+  @@index([username])
+
+  businessman Businessman?
+}
+
+model Businessman{
+  id Int @unique
+  
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
 }
