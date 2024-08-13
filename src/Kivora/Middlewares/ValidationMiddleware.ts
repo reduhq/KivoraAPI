@@ -11,7 +11,7 @@ export default class ValidationMiddleware{
             validate(modelDTO).then((errors:ValidationError[]) =>{
                 if(errors.length > 0){
                     // Validation Error : 422
-                    return res.status(422).json(this.ShowErrors(errors))
+                    return res.status(422).json({"errors": this.ShowErrors(errors)})
                 }
                 req.body = modelDTO
                 return next()
@@ -19,12 +19,16 @@ export default class ValidationMiddleware{
         }
     }
 
-    private static ShowErrors(errors:ValidationError[]){
-        const result:{[property:string]:string[]} = {}
+    private static ShowErrors(errors:ValidationError[], parent:string=""){
+        let result:{[property:string]:string[]} = {}
         errors.forEach(error =>{
-            result[error.property] = Object.values(error.constraints!)
+            if(error.children && error.children.length > 0){
+                result = {...result, ...this.ShowErrors(error.children, error.property)}
+            }else{
+                result[`${parent&&`${parent}.`}${error.property}`] = Object.values(error.constraints!)
+            }
         })
-        return {"errors":result}
+        return result
     }
 
 

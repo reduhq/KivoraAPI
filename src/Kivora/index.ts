@@ -18,6 +18,8 @@ server.setConfig(app =>{
 
 import './Controllers/v1/UserController'
 import './Controllers/v1/LoginController'
+import './Controllers/v1/BusinessmanController'
+
 const app = server.build()
 
 app.listen(PORT, ()=>{
