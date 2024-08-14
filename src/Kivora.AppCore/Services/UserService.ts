@@ -13,6 +13,9 @@ export default class UserService implements IUserService {
     constructor(@inject('IUserRepository') userRepository: IUserRepository) {
         this.userRepository = userRepository
     }
+    public async GetByEmail(email: string): Promise<User | null> {
+        return await this.userRepository.GetByEmail(email)
+    }
     public async Authenticate(
         username: string,
         password: string
