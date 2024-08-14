@@ -5,9 +5,7 @@ import { container } from './inversify.config'
 import swaggerDocs from './swagger'
 import settings from './Settings'
 
-const PORT = settings.PORT
-
-const server = new InversifyExpressServer(container)
+const server = new InversifyExpressServer(container);
 
 server.setConfig((app) => {
     app.use(express.json())
