@@ -32,7 +32,9 @@ model User {
   confirmed      Boolean  @default(false)
 
   businessman Businessman?
-  tokens      Token?
+
+  token   Token? @relation("UserToken")
+  tokenId Int?   @unique
 
   @@index([username])
 }
@@ -40,9 +42,11 @@ model User {
 model Token {
   id        Int      @id @default(autoincrement())
   token     String   @unique
-  userId    Int
+  userId    Int      @unique
   expiresAt DateTime @default(now()) @db.Timestamptz
-  user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  user      User     @relation("UserToken", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Businessman {

@@ -1,5 +1,6 @@
-import ITokenService from '@Kivora.AppCore/Interfaces/ITokenService';
-import ITokenRepository from '@Kivora.Domain/Interfaces/ITokenRepository';
+import ITokenService from '../../Kivora.AppCore/Interfaces/ITokenService';
+import { GenerateToken } from '../../Kivora.AppCore/utils/GenerateToken';
+import ITokenRepository from '../../Kivora.Domain/Interfaces/ITokenRepository';
 import { Token } from '@prisma/client';
 import { inject, injectable } from 'inversify';
 
@@ -12,9 +13,14 @@ export default class TokenService implements ITokenService {
   }
 
   public async GenerateToken(userId: number): Promise<Token> {
-    const tokenValue = Math.floor(100000 + Math.random() * 900000).toString();
+    // Generar un nuevo token
+    const tokenValue = GenerateToken(); // Utiliza la función que has definido
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // Expira en 10 minutos
 
+    // Eliminar el token existente para el usuario (si existe)
+    await this.tokenRepository.DeleteByUserId(userId);
+
+    // Crear y devolver el nuevo token
     const token = await this.tokenRepository.Create({
       token: tokenValue,
       userId,
