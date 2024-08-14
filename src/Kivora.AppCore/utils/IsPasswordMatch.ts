@@ -3,8 +3,8 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidationArguments,
-} from "class-validator";
+  ValidationArguments
+} from 'class-validator';
 
 @ValidatorConstraint({ async: false })
 export class IsPasswordMatchConstraint implements ValidatorConstraintInterface {
@@ -15,13 +15,13 @@ export class IsPasswordMatchConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage() {
-    return "Las contraseñas no coinciden";
+    return 'Las contraseñas no coinciden';
   }
 }
 
 export function IsPasswordMatch(
   property: string,
-  validationOptions?: ValidationOptions,
+  validationOptions?: ValidationOptions
 ) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
@@ -29,7 +29,7 @@ export function IsPasswordMatch(
       propertyName: propertyName,
       options: validationOptions,
       constraints: [property],
-      validator: IsPasswordMatchConstraint,
+      validator: IsPasswordMatchConstraint
     });
   };
 }

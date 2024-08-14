@@ -1,7 +1,7 @@
-import User from "../../Kivora.Domain/Entities/User";
-import UserCreateDTO from "../DTO/UserDTO/UserCreateDTO";
-import UserUpdateDTO from "../DTO/UserDTO/UserUpdateDTO";
-import IService from "./IService";
+import User from '../../Kivora.Domain/Entities/User';
+import UserCreateDTO from '../DTO/UserDTO/UserCreateDTO';
+import UserUpdateDTO from '../DTO/UserDTO/UserUpdateDTO';
+import IService from './IService';
 
 export default interface IUserService
   extends IService<User, UserCreateDTO, UserUpdateDTO> {
@@ -9,4 +9,3 @@ export default interface IUserService
   GetByEmail(email: string): Promise<User | null>;
   Authenticate(username: string, password: string): Promise<User | null>;
 }
-

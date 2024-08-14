@@ -1,16 +1,16 @@
-
 export default class Businessman {
-    private _id: number
+  private _id: number;
 
-    constructor(id: number) {
-        this._id = id
-    }
+  constructor(id: number) {
+    this._id = id;
+  }
 
-    public get id(): number {
-        return this._id;
-    }
+  public get id(): number {
+    return this._id;
+  }
 
-    public set id(id: number) {
-        this._id = id;
-    }
+  public set id(id: number) {
+    this._id = id;
+  }
 }
+
