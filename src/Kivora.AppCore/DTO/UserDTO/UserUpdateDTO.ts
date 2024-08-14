@@ -1,4 +1,1 @@
-
-export default class UserUpdateDTO{
-    
-}
+export default class UserUpdateDTO {}

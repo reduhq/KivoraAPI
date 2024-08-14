@@ -1,4 +1,3 @@
-
 export default class User {
     private _id: number
     private _username: string
@@ -17,7 +16,7 @@ export default class User {
         email: string,
         name: string,
         role: string,
-        createdAt: Date,
+        createdAt: Date
     ) {
         this._id = id
         this._username = username
@@ -29,85 +28,74 @@ export default class User {
     }
 
     public get id(): number {
-        return this._id;
+        return this._id
     }
 
-    public set id(id: number
-    ) {
-        this._id = id;
+    public set id(id: number) {
+        this._id = id
     }
 
     public get username(): string {
-        return this._username;
+        return this._username
     }
 
-    public set username(username: string
-    ) {
-        this._username = username;
+    public set username(username: string) {
+        this._username = username
     }
 
     public get password(): string {
-        return this._password;
+        return this._password
     }
 
-    public set password(password: string
-    ) {
-        this._password = password;
+    public set password(password: string) {
+        this._password = password
     }
 
     public get email(): string {
-        return this._email;
+        return this._email
     }
 
-    public set email(email: string
-    ) {
-        this._email = email;
+    public set email(email: string) {
+        this._email = email
     }
 
     public get name(): string {
-        return this._name;
+        return this._name
     }
 
-    public set name(name: string
-    ) {
-        this._name = name;
+    public set name(name: string) {
+        this._name = name
     }
 
     public get profilePicture(): string | null {
-        return this._profilePicture;
+        return this._profilePicture
     }
 
     public set profilePicture(profilePicture: string | null) {
-        this._profilePicture = profilePicture;
+        this._profilePicture = profilePicture
     }
 
     public get phone(): string | null {
-        return this._phone;
+        return this._phone
     }
 
     public set phone(phone: string | null) {
-        this._phone = phone;
+        this._phone = phone
     }
 
     public get role(): string {
-        return this._role;
+        return this._role
     }
 
-    public set role(role: string
-    ) {
-        this._role = role;
+    public set role(role: string) {
+        this._role = role
     }
 
     public get createdAt(): Date {
-        return this._createdAt;
+        return this._createdAt
     }
 
     public set createdAt(createdAt: Date) {
-        this._createdAt = createdAt;
+        this._createdAt = createdAt
     }
-
-
-
-
-
-} 
+}

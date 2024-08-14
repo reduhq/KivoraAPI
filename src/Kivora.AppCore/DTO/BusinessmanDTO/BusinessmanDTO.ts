@@ -1,4 +1,1 @@
-
-export default class BusinessmanDTO{
-
-}
+export default class BusinessmanDTO {}
