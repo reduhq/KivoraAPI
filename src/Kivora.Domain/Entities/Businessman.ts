@@ -1,4 +1,3 @@
-
 export default class Businessman {
     private _id: number
 
@@ -7,10 +6,10 @@ export default class Businessman {
     }
 
     public get id(): number {
-        return this._id;
+        return this._id
     }
 
     public set id(id: number) {
-        this._id = id;
+        this._id = id
     }
 }

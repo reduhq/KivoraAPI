@@ -2,6 +2,7 @@ import { Expose } from "class-transformer";
 import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
 import { IsPasswordMatch } from "../../utils/IsPasswordMatch";
 
+
 /**
  *  @swagger
  *  components:

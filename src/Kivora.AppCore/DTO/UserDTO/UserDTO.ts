@@ -1,5 +1,5 @@
-import { Expose } from "class-transformer";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Expose } from 'class-transformer'
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 /**
  *  @swagger
@@ -15,14 +15,14 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator";
  *                      type: string
  *                      example: reduhq
  */
-export default class UserDTO{
+export default class UserDTO {
     @Expose()
     @IsNumber()
     @IsNotEmpty()
-    id:number = 0
+    id: number = 0
 
     @Expose()
     @IsString()
     @IsNotEmpty()
-    username:string = ''
+    username: string = ''
 }

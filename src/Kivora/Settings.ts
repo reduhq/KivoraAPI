@@ -14,4 +14,3 @@ class Settings {
 const settings = new Settings();
 
 export default settings;
-

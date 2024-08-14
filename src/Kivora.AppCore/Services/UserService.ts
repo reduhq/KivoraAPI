@@ -1,26 +1,32 @@
-import { inject, injectable } from "inversify";
-import User from "../../Kivora.Domain/Entities/User";
-import IUserRepository from "../../Kivora.Domain/Interfaces/IUserRepository";
-import IUserService from "../Interfaces/IUserService";
-import UserCreateDTO from "../DTO/UserDTO/UserCreateDTO";
-import UserUpdateDTO from "../DTO/UserDTO/UserUpdateDTO";
-import Security from "../utils/Security";
+import { inject, injectable } from 'inversify'
+import User from '../../Kivora.Domain/Entities/User'
+import IUserRepository from '../../Kivora.Domain/Interfaces/IUserRepository'
+import IUserService from '../Interfaces/IUserService'
+import UserCreateDTO from '../DTO/UserDTO/UserCreateDTO'
+import UserUpdateDTO from '../DTO/UserDTO/UserUpdateDTO'
+import Security from '../utils/Security'
 
 @injectable()
-export default class UserService implements IUserService{
-    private userRepository:IUserRepository
+export default class UserService implements IUserService {
+    private userRepository: IUserRepository
 
-    constructor(@inject('IUserRepository') userRepository: IUserRepository){
+    constructor(@inject('IUserRepository') userRepository: IUserRepository) {
         this.userRepository = userRepository
     }
-    public async Authenticate(username: string, password: string): Promise<User|null> {
+    public async Authenticate(
+        username: string,
+        password: string
+    ): Promise<User | null> {
         const user = await this.userRepository.GetByUsername(username)
-        if(!user){
+        if (!user) {
             return null
         }
         // Validating the password
-        const validPassword = await Security.ValidatePassword(password, user.password)
-        if(!validPassword){
+        const validPassword = await Security.ValidatePassword(
+            password,
+            user.password
+        )
+        if (!validPassword) {
             return null
         }
         return user
@@ -35,11 +41,10 @@ export default class UserService implements IUserService{
     public async Update(t: UserUpdateDTO): Promise<User> {
         return await this.userRepository.Update(t)
     }
-    public async Delete(id: number): Promise<Boolean> {
+    public async Delete(id: number): Promise<boolean> {
         return await this.userRepository.Delete(id)
     }
     public async GetAll(): Promise<User[]> {
         return await this.userRepository.GetAll()
     }
-
 }
