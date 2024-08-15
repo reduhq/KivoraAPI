@@ -29,10 +29,24 @@ model User {
   phone          String?
   role           ROLE
   createdAt      DateTime @default(now())
+  confirmed      Boolean  @default(false)
 
   businessman Businessman?
 
+  token   Token? @relation("UserToken")
+  tokenId Int?   @unique
+
   @@index([username])
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int      @unique
+  expiresAt DateTime @default(now()) @db.Timestamptz
+  user      User     @relation("UserToken", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Businessman {

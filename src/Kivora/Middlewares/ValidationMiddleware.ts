@@ -68,3 +68,4 @@ export default class ValidationMiddleware {
         return { errors: result }
     }
 }
+

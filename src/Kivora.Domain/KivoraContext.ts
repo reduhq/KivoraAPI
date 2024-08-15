@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 class PrismaSingleton {
     private static instance: PrismaClient
 
-    private constructor() {} // Hacer el constructor privado evita instanciaciones externas
+  private constructor() {} // Hacer el constructor privado evita instanciaciones externas
 
     public static getInstance(): PrismaClient {
         if (!PrismaSingleton.instance) {
