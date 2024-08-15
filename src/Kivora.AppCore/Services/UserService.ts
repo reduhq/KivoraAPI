@@ -13,9 +13,11 @@ export default class UserService implements IUserService {
     constructor(@inject('IUserRepository') userRepository: IUserRepository) {
         this.userRepository = userRepository
     }
+
     public async GetByEmail(email: string): Promise<User | null> {
         return await this.userRepository.GetByEmail(email)
     }
+
     public async Authenticate(
         username: string,
         password: string
@@ -34,19 +36,24 @@ export default class UserService implements IUserService {
         }
         return user
     }
+
     public async GetByUsername(username: string): Promise<User> {
         return await this.userRepository.GetByUsername(username)
     }
+
     public async Create(t: UserCreateDTO): Promise<User> {
         t.password = await Security.HashPassword(t.password)
         return await this.userRepository.Create(t)
     }
+
     public async Update(t: UserUpdateDTO): Promise<User> {
         return await this.userRepository.Update(t)
     }
+
     public async Delete(id: number): Promise<boolean> {
         return await this.userRepository.Delete(id)
     }
+
     public async GetAll(): Promise<User[]> {
         return await this.userRepository.GetAll()
     }

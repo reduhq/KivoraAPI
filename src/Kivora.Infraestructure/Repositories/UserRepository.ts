@@ -6,6 +6,7 @@ import { injectable } from 'inversify'
 import { plainToInstance } from 'class-transformer'
 import UserCreateDTO from '../../Kivora.AppCore/DTO/UserDTO/UserCreateDTO'
 import UserUpdateDTO from '../../Kivora.AppCore/DTO/UserDTO/UserUpdateDTO'
+import { ROLE } from '@Kivora.Domain/Enums/ROLE'
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -14,6 +15,7 @@ export default class UserRepository implements IUserRepository {
     constructor() {
         this.context = KivoraContext
     }
+
     public async GetByEmail(email: string): Promise<User | null> {
         const user = await this.context.user.findFirst({
             where: {
@@ -22,6 +24,7 @@ export default class UserRepository implements IUserRepository {
         })
         return plainToInstance(User, user)
     }
+
     public async GetByUsername(username: string): Promise<User> {
         const user = await this.context.user.findFirst({
             where: {
@@ -30,24 +33,28 @@ export default class UserRepository implements IUserRepository {
         })
         return plainToInstance(User, user)
     }
-    public async Create(t: UserCreateDTO): Promise<User> {
+
+    public async Create(t: UserCreateDTO, role?: ROLE): Promise<User> {
         const userResponse = await this.context.user.create({
             data: {
                 username: t.username,
                 password: t.password,
                 email: t.email,
                 name: t.name,
-                role: 'ADMIN'
+                role: role ?? ROLE.ADMIN
             }
         })
         return plainToInstance(User, userResponse)
     }
+
     Update(_t: UserUpdateDTO): Promise<User> {
         throw new Error('Method not implemented.')
     }
+
     Delete(_id: number): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
+
     public async GetAll(): Promise<User[]> {
         const usersResponse = await this.context.user.findMany()
         return plainToInstance(User, usersResponse)

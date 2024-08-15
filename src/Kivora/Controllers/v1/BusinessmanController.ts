@@ -3,23 +3,61 @@ import { controller, httpPost } from 'inversify-express-utils'
 import settings from '../../Settings'
 import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import BusinessmanCreateDTO from '../../../Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanCreateDTO'
-// import IBusinessmanRepository from "../../../Kivora.Domain/Interfaces/IBusinessmanRepository";
-// import { inject } from "inversify";
+import IBusinessmanRepository from '../../../Kivora.Domain/Interfaces/IBusinessmanRepository'
+import { inject } from 'inversify'
+import Businessman from '@Kivora.Domain/Entities/Businessman'
+import { plainToInstance } from 'class-transformer'
+import BusinessmanDTO from '@Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanDTO'
+import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
+import IBusinessmanService from '@Kivora.AppCore/Interfaces/IBusinessmanService'
 
 @controller(`${settings.API_V1_STR}/businessman`)
 export default class BusinessmanController {
-    // private businessmanRepository: IBusinessmanRepository
+    private businessmanService: IBusinessmanService
+    private userService: IUserService
 
-    // constructor(@inject('IBusinessmanRepository') businessmanRepository:IBusinessmanRepository){
-    //     this.businessmanRepository = businessmanRepository
-    // }
+    constructor(
+        @inject('IBusinessmanService')
+        businessmanService: IBusinessmanRepository,
+        @inject('IUserService')
+        userService: IUserService
+    ) {
+        this.businessmanService = businessmanService
+        this.userService = userService
+    }
 
     @httpPost('/', ValidationMiddleware.body(BusinessmanCreateDTO))
     public async CreateBusinessman(
         req: Request,
         res: Response
     ): Promise<Response> {
-        console.log(req.body)
-        return res.json(req.body)
+        const businessman: BusinessmanCreateDTO = req.body
+        // Getting the user by username and email
+        const userDB = await this.userService.GetByUsername(
+            businessman.user.username
+        )
+        const emailDB = await this.userService.GetByEmail(
+            businessman.user.email
+        )
+        // Validating
+        if (
+            businessman.user.password !== businessman.user.passwordConfirmation
+        ) {
+            return res.status(400).json('Las contraseñas son diferentes')
+        }
+        if (userDB) {
+            return res.status(409).json('El username ya esta en uso')
+        }
+        if (emailDB) {
+            return res.status(409).json({ message: 'El email ya esta en uso' })
+        }
+        // Creating a new Businessman
+        const newBusinessman: Businessman =
+            await this.businessmanService.Create(businessman)
+        // Returning the data
+        const result = plainToInstance(BusinessmanDTO, newBusinessman, {
+            excludeExtraneousValues: true
+        })
+        return res.status(200).json(result)
     }
 }

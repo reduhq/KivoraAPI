@@ -1,26 +1,33 @@
-// import { inject, injectable } from "inversify";
+import { inject, injectable } from 'inversify'
 import Businessman from '../../Kivora.Domain/Entities/Businessman'
 import BusinessmanCreateDTO from '../DTO/BusinessmanDTO/BusinessmanCreateDTO'
 import BusinessmanUpdateDTO from '../DTO/BusinessmanDTO/BusinessmanUpdateDTO'
 import IBusinessmanService from '../Interfaces/IBusinessmanService'
-// import IBusinessmanRepository from "../../Kivora.Domain/Interfaces/IBusinessmanRepository";
+import IBusinessmanRepository from '../../Kivora.Domain/Interfaces/IBusinessmanRepository'
 
-// @injectable()
+@injectable()
 export default class BusinessmanService implements IBusinessmanService {
-    // private businessmanRepository:IBusinessmanRepository
+    private businessmanRepository: IBusinessmanRepository
 
-    // constructor(@inject('IBusinessmanRepository') businessmanRepository:IBusinessmanRepository){
-    //     this.businessmanRepository = businessmanRepository
-    // }
-    Create(_t: BusinessmanCreateDTO): Promise<Businessman> {
-        throw new Error('Method not implemented.')
+    constructor(
+        @inject('IBusinessmanRepository')
+        businessmanRepository: IBusinessmanRepository
+    ) {
+        this.businessmanRepository = businessmanRepository
     }
+
+    public async Create(t: BusinessmanCreateDTO): Promise<Businessman> {
+        return await this.businessmanRepository.Create(t)
+    }
+
     Update(_t: BusinessmanUpdateDTO): Promise<Businessman> {
         throw new Error('Method not implemented.')
     }
+
     Delete(_id: number): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
+
     GetAll(): Promise<Businessman[]> {
         throw new Error('Method not implemented.')
     }
