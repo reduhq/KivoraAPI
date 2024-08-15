@@ -34,41 +34,41 @@ export default class UserRepository implements IUserRepository {
         return plainToInstance(User, user)
     }
     public async GetUserByToken(token: string): Promise<User | null> {
-      const user = await this.context.user.findFirst({
-        where: {
-          token: {
-            token: token,
-          },
-        },
-        include: {
-          token: true,
-        },
-      });
-  
-      return user ? plainToInstance(User, user) : null;
+        const user = await this.context.user.findFirst({
+            where: {
+                token: {
+                    token: token
+                }
+            },
+            include: {
+                token: true
+            }
+        })
+
+        return user ? plainToInstance(User, user) : null
     }
     public async Update(_t: UserUpdateDTO): Promise<User> {
-      if (!_t.id) {
-        throw new Error("ID is required for updating the user");
-      }
-  
-      const updatedUser = await this.context.user.update({
-        where: {
-          id: _t.id, // Usamos el ID para encontrar el usuario
-        },
-        data: {
-          username: _t.username,
-          email: _t.email,
-          password: _t.password,
-          name: _t.name,
-          profilePicture: _t.profilePicture,
-          phone: _t.phone,
-          confirmed: _t.confirmed,
-          role: _t.role,
-        },
-      });
-  
-      return plainToInstance(User, updatedUser); // Convertir el resultado a instancia de User
+        if (!_t.id) {
+            throw new Error('ID is required for updating the user')
+        }
+
+        const updatedUser = await this.context.user.update({
+            where: {
+                id: _t.id // Usamos el ID para encontrar el usuario
+            },
+            data: {
+                username: _t.username,
+                email: _t.email,
+                password: _t.password,
+                name: _t.name,
+                profilePicture: _t.profilePicture,
+                phone: _t.phone,
+                confirmed: _t.confirmed,
+                role: _t.role
+            }
+        })
+
+        return plainToInstance(User, updatedUser) // Convertir el resultado a instancia de User
     }
 
     public async Create(t: UserCreateDTO, role?: ROLE): Promise<User> {
@@ -83,7 +83,6 @@ export default class UserRepository implements IUserRepository {
         })
         return plainToInstance(User, userResponse)
     }
-
 
     Delete(_id: number): Promise<boolean> {
         throw new Error('Method not implemented.')

@@ -8,12 +8,6 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator'
  *          UserCreateDTO:
  *              type: object
  *              properties:
- *                  name:
- *                      type: string
- *                      example: reduhq
- *                  email:
- *                      type: email
- *                      example: correo@correo.com
  *                  username:
  *                      type: string
  *                      example: reduhq

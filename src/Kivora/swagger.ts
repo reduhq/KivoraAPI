@@ -1,7 +1,7 @@
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUI from 'swagger-ui-express';
-import express from 'express';
-import settings from './Settings';
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUI from 'swagger-ui-express'
+import express from 'express'
+import settings from './Settings'
 
 // Metadata info about our API
 const options = {
@@ -34,7 +34,7 @@ const options = {
 }
 
 // Docs en JSON format
-const swaggerSpec = swaggerJSDoc(options);
+const swaggerSpec = swaggerJSDoc(options)
 
 // Function to setup our docs
 const swaggerDocs = (app: express.Application) => {

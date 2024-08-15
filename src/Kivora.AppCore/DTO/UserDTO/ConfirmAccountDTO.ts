@@ -1,5 +1,5 @@
-import { Expose } from "class-transformer";
-import { IsNotEmpty, IsString } from "class-validator";
+import { Expose } from 'class-transformer'
+import { IsNotEmpty, IsString } from 'class-validator'
 
 /**
  *  @swagger
@@ -14,8 +14,8 @@ import { IsNotEmpty, IsString } from "class-validator";
  *                      example: "abcdef123456"
  */
 export class ConfirmAccountDTO {
-  @Expose()
-  @IsString()
-  @IsNotEmpty({ message: "El token no puede estar vacío" })
-  token: string = "";
+    @Expose()
+    @IsString()
+    @IsNotEmpty({ message: 'El token no puede estar vacío' })
+    token: string = ''
 }

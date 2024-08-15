@@ -1,18 +1,18 @@
-import { Type } from "class-transformer";
+import { Type } from 'class-transformer'
 
 import {
-  IsBoolean,
-  IsEmail,
-  IsEnum,
-  IsInt,
-  IsOptional,
-  IsString,
-} from "class-validator";
+    IsBoolean,
+    IsEmail,
+    IsEnum,
+    IsInt,
+    IsOptional,
+    IsString
+} from 'class-validator'
 
 export enum ROLE {
-  ADMIN = "ADMIN",
-  CLIENT = "CLIENT",
-  BUSINESSMAN = "BUSINESSMAN",
+    ADMIN = 'ADMIN',
+    CLIENT = 'CLIENT',
+    BUSINESSMAN = 'BUSINESSMAN'
 }
 /**
  *  @swagger
@@ -61,40 +61,40 @@ export enum ROLE {
  *        required:
  *          - id
  */ export default class UserUpdateDTO {
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  id?: number;
+    @IsOptional()
+    @IsInt()
+    @Type(() => Number)
+    id?: number
 
-  @IsOptional()
-  @IsString()
-  username?: string;
+    @IsOptional()
+    @IsString()
+    username?: string
 
-  @IsOptional()
-  @IsEmail()
-  email?: string;
+    @IsOptional()
+    @IsEmail()
+    email?: string
 
-  @IsOptional()
-  @IsString()
-  password?: string;
+    @IsOptional()
+    @IsString()
+    password?: string
 
-  @IsOptional()
-  @IsString()
-  name?: string;
+    @IsOptional()
+    @IsString()
+    name?: string
 
-  @IsOptional()
-  @IsString()
-  profilePicture?: string;
+    @IsOptional()
+    @IsString()
+    profilePicture?: string
 
-  @IsOptional()
-  @IsString()
-  phone?: string;
+    @IsOptional()
+    @IsString()
+    phone?: string
 
-  @IsOptional()
-  @IsBoolean()
-  confirmed?: boolean;
+    @IsOptional()
+    @IsBoolean()
+    confirmed?: boolean
 
-  @IsOptional()
-  @IsEnum(ROLE)
-  role?: ROLE;
+    @IsOptional()
+    @IsEnum(ROLE)
+    role?: ROLE
 }
