@@ -9,6 +9,11 @@ class Settings {
     public readonly SECRET_KEY: string = crypto.randomBytes(32).toString('hex')
     public readonly ACCESS_TOKEN_EXPIRES_MINUTES: number = 60 * 5
     public readonly ALGORITHM: string = 'HS256'
+
+    public readonly SMTP_HOST: string = process.env.SMTP_HOST as string
+    public readonly SMTP_PORT: string = process.env.SMTP_PORT as string
+    public readonly SMTP_USER: string = process.env.SMTP_USER as string
+    public readonly SMTP_PASSWORD: string = process.env.SMTP_PASSWORD as string
 }
 
 const settings = new Settings()

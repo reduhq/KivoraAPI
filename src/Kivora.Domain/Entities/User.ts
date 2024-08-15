@@ -8,6 +8,7 @@ export default class User {
     private _phone: string | null = null
     private _role: string
     private _createdAt: Date
+    private _confirmed: boolean
 
     constructor(
         id: number,
@@ -16,7 +17,8 @@ export default class User {
         email: string,
         name: string,
         role: string,
-        createdAt: Date
+        createdAt: Date,
+        confirmed: boolean
     ) {
         this._id = id
         this._username = username
@@ -25,6 +27,7 @@ export default class User {
         this._name = name
         this._role = role
         this._createdAt = createdAt
+        this._confirmed = confirmed
     }
 
     public get id(): number {
@@ -97,5 +100,13 @@ export default class User {
 
     public set createdAt(createdAt: Date) {
         this._createdAt = createdAt
+    }
+
+    public get confirmed(): boolean {
+        return this._confirmed
+    }
+
+    public set confirmed(confirmed: boolean) {
+        this._confirmed = confirmed
     }
 }
