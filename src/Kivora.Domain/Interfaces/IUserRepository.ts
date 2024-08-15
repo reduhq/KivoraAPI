@@ -7,4 +7,5 @@ export default interface IUserRepository
   extends IRepository<User, UserCreateDTO, UserUpdateDTO> {
   GetByUsername(username: string): Promise<User>;
   GetByEmail(email: string): Promise<User>;
+  GetUserByToken(token: string): Promise<User | null>;
 }
