@@ -16,6 +16,15 @@ export default class UserRepository implements IUserRepository {
         this.context = KivoraContext
     }
 
+    public async GetById(id: number): Promise<User> {
+        const user = await this.context.user.findFirst({
+            where: {
+                id
+            }
+        })
+        return plainToInstance(User, user)
+    }
+
     public async GetByEmail(email: string): Promise<User | null> {
         const user = await this.context.user.findFirst({
             where: {

@@ -9,5 +9,6 @@ export default interface IUserRepository
     Create(_t: UserCreateDTO, role?: ROLE): Promise<User>
     GetByUsername(username: string): Promise<User>
     GetByEmail(email: string): Promise<User | null>
+    GetById(id: number): Promise<User>
     GetUserByToken(token: string): Promise<User | null>
 }

@@ -13,6 +13,11 @@ export default class UserService implements IUserService {
     constructor(@inject('IUserRepository') userRepository: IUserRepository) {
         this.userRepository = userRepository
     }
+
+    public async GetById(id: number): Promise<User> {
+        return await this.userRepository.GetById(id)
+    }
+
     public async Authenticate(
         username: string,
         password: string
