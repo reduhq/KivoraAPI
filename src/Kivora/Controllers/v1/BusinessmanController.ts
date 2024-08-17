@@ -13,6 +13,12 @@ import IBusinessmanService from '@Kivora.AppCore/Interfaces/IBusinessmanService'
 
 @controller(`${settings.API_V1_STR}/businessman`)
 export default class BusinessmanController {
+    /**
+     *  @swagger
+     *  tags:
+     *      name: Businessman
+     *      description: Businessman management
+     */
     private businessmanService: IBusinessmanService
     private userService: IUserService
 
@@ -26,6 +32,27 @@ export default class BusinessmanController {
         this.userService = userService
     }
 
+    /**
+     *  @swagger
+     *  /api/v1/businessman:
+     *      post:
+     *          summary: Create a new businessman
+     *          security: []
+     *          tags: [Businessman]
+     *          requestBody:
+     *              required: true
+     *              content:
+     *                  application/json:
+     *                      schema:
+     *                          $ref: '#/components/schemas/BusinessmanCreateDTO'
+     *          responses:
+     *              200:
+     *                  description: User created successfully
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              $ref: '#/components/schemas/BusinessmanDTO'
+     */
     @httpPost('/', ValidationMiddleware.body(BusinessmanCreateDTO))
     public async CreateBusinessman(
         req: Request,

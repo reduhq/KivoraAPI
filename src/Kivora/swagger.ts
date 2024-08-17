@@ -11,6 +11,7 @@ const options = {
             title: 'Kivora API',
             version: '1.0.0'
         },
+        tags: [{ name: 'Auth' }, { name: 'User' }, { name: 'Businessman' }],
         components: {
             securitySchemes: {
                 oAuth2Password: {
@@ -25,9 +26,9 @@ const options = {
             }
         },
         security: [
-            {
-                oAuth2Password: []
-            }
+            // {
+            //     oAuth2Password: []
+            // }
         ]
     },
     apis: ['./src/Kivora.AppCore/DTO/*/*', './src/Kivora/Controllers/v1/*']
