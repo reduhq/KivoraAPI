@@ -10,6 +10,8 @@ import { plainToInstance } from 'class-transformer'
 import BusinessmanDTO from '@Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanDTO'
 import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
 import IBusinessmanService from '@Kivora.AppCore/Interfaces/IBusinessmanService'
+import JWT from '@Kivora/libs/JWT'
+import Nodemailer from '@Kivora/libs/Nodemailer'
 
 @controller(`${settings.API_V1_STR}/businessman`)
 export default class BusinessmanController {
@@ -81,6 +83,16 @@ export default class BusinessmanController {
         // Creating a new Businessman
         const newBusinessman: Businessman =
             await this.businessmanService.Create(businessman)
+        // Generating the token
+        const token = JWT.GenerateNewAccountToken(newBusinessman.id)
+        // Sending an email to verify if the user is real and activate the account
+        if (settings.EMAILS_ENABLED && businessman.user.email) {
+            await Nodemailer.SendNewAccountEmail(
+                businessman.user.email,
+                businessman.user.username,
+                token
+            )
+        }
         // Returning the data
         const result = plainToInstance(BusinessmanDTO, newBusinessman, {
             excludeExtraneousValues: true
