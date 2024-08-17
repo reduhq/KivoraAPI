@@ -8,6 +8,7 @@ export default interface IUserService
     GetByUsername(username: string): Promise<User>
     GetByEmail(email: string): Promise<User | null>
     GetById(id: number): Promise<User>
+    ActivateUser(id: number): Promise<User>
     GetUserByToken(token: string): Promise<User | null>
     Authenticate(username: string, password: string): Promise<User | null>
 }

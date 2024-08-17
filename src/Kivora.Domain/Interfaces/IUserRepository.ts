@@ -10,5 +10,6 @@ export default interface IUserRepository
     GetByUsername(username: string): Promise<User>
     GetByEmail(email: string): Promise<User | null>
     GetById(id: number): Promise<User>
+    ActivateUser(id: number): Promise<User>
     GetUserByToken(token: string): Promise<User | null>
 }

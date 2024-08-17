@@ -1,4 +1,4 @@
-import { sign } from 'jsonwebtoken'
+import { sign, verify } from 'jsonwebtoken'
 import settings from '../../Kivora/Settings'
 
 export default class JWT {
@@ -37,5 +37,14 @@ export default class JWT {
         // Signing the token
         const encodedJWT = sign(toEncode, settings.SECRET_KEY)
         return encodedJWT
+    }
+
+    public static VerifyToken(token: string): number | null {
+        try {
+            const validToken = verify(token, settings.SECRET_KEY)
+            return parseInt(validToken.sub as string)
+        } catch (e) {
+            return null
+        }
     }
 }

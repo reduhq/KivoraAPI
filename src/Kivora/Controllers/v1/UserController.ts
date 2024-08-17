@@ -10,6 +10,10 @@ import settings from '../../Settings'
 import { IEmailService } from '../../../Kivora.AppCore/Interfaces/IEmailService'
 import ITokenService from '../../../Kivora.AppCore/Interfaces/ITokenService'
 import { ConfirmAccountDTO } from '../../../Kivora.AppCore/DTO/UserDTO/ConfirmAccountDTO'
+import { query } from 'express-validator'
+import JWT from '@Kivora/libs/JWT'
+import User from '@Kivora.Domain/Entities/User'
+import Nodemailer from '@Kivora/libs/Nodemailer'
 
 @controller(`${settings.API_V1_STR}/user`)
 export default class UserController {
@@ -116,7 +120,6 @@ export default class UserController {
      *                                  message:
      *                                      type: string
      */
-
     @httpPost('/confirm-account', ValidationMiddleware.body(ConfirmAccountDTO))
     public async confirm_account(
         req: Request,
@@ -145,6 +148,69 @@ export default class UserController {
         return res
             .status(200)
             .json({ message: 'Account confirmed successfully' })
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/user/activate-user:
+     *      post:
+     *          summary: Activate a user
+     *          tags: [User]
+     *          parameters:
+     *              -   in: query
+     *                  name: token
+     *                  required: true
+     *                  schema:
+     *                      type: string
+     *          responses:
+     *              200:
+     *                  description: The user has been activated successfully
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              type: object
+     *                              properties:
+     *                                  message:
+     *                                      type: string
+     */
+    @httpPost(
+        '/activate-user',
+        query('token')
+            .exists()
+            .withMessage('El campo token es requerido')
+            .notEmpty()
+            .withMessage('El token no puede estar vacio')
+            .isString()
+            .withMessage('El token deberia de ser un string'),
+        ValidationMiddleware.validate()
+    )
+    public async ActivateUser(req: Request, res: Response): Promise<Response> {
+        const { token } = req.query
+        const userId = JWT.VerifyToken(token as string)
+        if (!userId) {
+            return res.status(403).json('Token inválido')
+        }
+        // Validating the user
+        const user: User = await this.userService.GetById(userId)
+        if (!user) {
+            return res.status(404).json('usuario no encontrado')
+        }
+        if (user.confirmed) {
+            return res
+                .status(403)
+                .json(
+                    'La cuenta de este usuario ya ha sido activada anteriormente'
+                )
+        }
+        // Activating the user account
+        const activatedUser: User = await this.userService.ActivateUser(userId)
+        // Sending a welcome email
+        await Nodemailer.SendWelcomeEmail(
+            activatedUser.email,
+            activatedUser.username
+        )
+        // Returning the response
+        return res.json({ msg: 'El usuario ha sido activado exitosamente' })
     }
 
     /**

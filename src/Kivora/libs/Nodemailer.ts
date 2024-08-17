@@ -48,12 +48,22 @@ export default class Nodemailer {
     ) {
         const subjectTemplate = `${settings.PROJECT_NAME} - Nueva cuenta creada para @${username}`
         const htmlTemplate = 'NewAccount.html'
-        const link = `${settings.SERVER_HOST}/verified-account?token=${token}`
+        const link = `${settings.FRONTEND_HOST}/verified-account?token=${token}`
         await this.SendMail(emailTo, subjectTemplate, htmlTemplate, {
             link: link,
             valid_minutes: (
                 settings.EMAIL_RESET_TOKEN_EXPIRE_MINUTES / 60
             ).toString(),
+            username: username
+        })
+    }
+
+    public static async SendWelcomeEmail(emailTo: string, username: string) {
+        const subjectTemplate = `Te damos la bienvenida a ${settings.PROJECT_NAME}`
+        const htmlTemplate = 'Welcome.html'
+        const link = settings.FRONTEND_HOST
+        await this.SendMail(emailTo, subjectTemplate, htmlTemplate, {
+            link: link,
             username: username
         })
     }

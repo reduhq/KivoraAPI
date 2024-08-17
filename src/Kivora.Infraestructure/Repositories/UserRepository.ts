@@ -16,6 +16,18 @@ export default class UserRepository implements IUserRepository {
         this.context = KivoraContext
     }
 
+    public async ActivateUser(id: number): Promise<User> {
+        const user = await this.context.user.update({
+            where: {
+                id
+            },
+            data: {
+                confirmed: true
+            }
+        })
+        return plainToInstance(User, user)
+    }
+
     public async GetById(id: number): Promise<User> {
         const user = await this.context.user.findFirst({
             where: {

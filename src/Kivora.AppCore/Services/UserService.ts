@@ -14,6 +14,10 @@ export default class UserService implements IUserService {
         this.userRepository = userRepository
     }
 
+    public async ActivateUser(id: number): Promise<User> {
+        return await this.userRepository.ActivateUser(id)
+    }
+
     public async GetById(id: number): Promise<User> {
         return await this.userRepository.GetById(id)
     }
