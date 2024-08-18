@@ -1,10 +1,11 @@
-import UserDTO from '@Kivora.AppCore/DTO/UserDTO/UserDTO'
+import { Expose } from 'class-transformer'
+import User from './User'
 
 export default class Businessman {
     private _id: number
-    private _user: UserDTO
+    private _user: User | null
 
-    constructor(id: number, user: UserDTO) {
+    constructor(id: number, user: User) {
         this._id = id
         this._user = user
     }
@@ -13,15 +14,15 @@ export default class Businessman {
         return this._id
     }
 
-    public set id(id: number) {
+    @Expose() public set id(id: number) {
         this._id = id
     }
 
-    public get user(): UserDTO {
+    public get user(): User | null {
         return this._user
     }
 
-    public set user(user: UserDTO) {
+    @Expose() public set user(user: User) {
         this._user = user
     }
 }

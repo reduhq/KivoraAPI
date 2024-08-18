@@ -37,7 +37,13 @@ export default class BusinessmanRepository implements IBusinessmanRepository {
                 user: true
             }
         })
-        return plainToInstance(Businessman, businessmanCreate)
+        const u = plainToInstance(Businessman, businessmanCreate, {
+            excludeExtraneousValues: true
+        })
+        console.log(u.id)
+        return plainToInstance(Businessman, businessmanCreate, {
+            excludeExtraneousValues: true
+        })
     }
 
     Update(_t: BusinessmanUpdateDTO): Promise<Businessman> {
