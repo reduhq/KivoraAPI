@@ -70,11 +70,7 @@ export default class LoginController {
      *                                      type: string
      *                                      example: Credenciales invalidas
      */
-    @httpPost(
-        '/login/access-token',
-        ValidationMiddleware.body(AuthDTO),
-        ValidationMiddleware.validate()
-    )
+    @httpPost('/login/access-token', ValidationMiddleware.body(AuthDTO))
     public async LoginAccessToken(
         req: Request,
         res: Response

@@ -1,19 +1,6 @@
-import { Type } from 'class-transformer'
+import { Expose } from 'class-transformer'
+import { IsOptional, IsString } from 'class-validator'
 
-import {
-    IsBoolean,
-    IsEmail,
-    IsEnum,
-    IsInt,
-    IsOptional,
-    IsString
-} from 'class-validator'
-
-export enum ROLE {
-    ADMIN = 'ADMIN',
-    CLIENT = 'CLIENT',
-    BUSINESSMAN = 'BUSINESSMAN'
-}
 /**
  *  @swagger
  *  components:
@@ -21,22 +8,6 @@ export enum ROLE {
  *      UserUpdateDTO:
  *        type: object
  *        properties:
- *          id:
- *            type: integer
- *            description: ID del usuario (obligatorio para la actualización)
- *            example: 1
- *          username:
- *            type: string
- *            description: Nombre de usuario del usuario
- *            example: johndoe
- *          email:
- *            type: string
- *            description: Correo electrónico del usuario
- *            example: johndoe@example.com
- *          password:
- *            type: string
- *            description: Contraseña del usuario (aunque generalmente se maneja de manera diferente)
- *            example: newpassword123
  *          name:
  *            type: string
  *            description: Nombre completo del usuario
@@ -49,52 +20,20 @@ export enum ROLE {
  *            type: string
  *            description: Número de teléfono del usuario
  *            example: +1234567890
- *          confirmed:
- *            type: boolean
- *            description: Indica si la cuenta del usuario está confirmada
- *            example: true
- *          role:
- *            type: string
- *            enum: [ADMIN, CLIENT, BUSINESSMAN]
- *            description: Rol del usuario en el sistema
- *            example: ADMIN
- *        required:
- *          - id
- */ export default class UserUpdateDTO {
-    @IsOptional()
-    @IsInt()
-    @Type(() => Number)
-    id?: number
-
-    @IsOptional()
-    @IsString()
-    username?: string
-
-    @IsOptional()
-    @IsEmail()
-    email?: string
-
-    @IsOptional()
-    @IsString()
-    password?: string
-
+ */
+export default class UserUpdateDTO {
+    @Expose()
     @IsOptional()
     @IsString()
     name?: string
 
+    @Expose()
     @IsOptional()
     @IsString()
     profilePicture?: string
 
+    @Expose()
     @IsOptional()
     @IsString()
     phone?: string
-
-    @IsOptional()
-    @IsBoolean()
-    confirmed?: boolean
-
-    @IsOptional()
-    @IsEnum(ROLE)
-    role?: ROLE
 }

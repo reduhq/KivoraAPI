@@ -137,11 +137,12 @@ export default class UserController {
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado' })
         }
-        const updateUserDTO = {
-            id: user.id,
-            confirmed: true
-        }
-        await this.userService.Update(updateUserDTO)
+        // const updateUserDTO = {
+        //     id: user.id,
+        //     confirmed: true
+        // }
+        // await this.userService.Update(updateUserDTO)
+        await this.userService.ActivateUser(user.id)
 
         await this.tokenService.InvalidateToken(token.token)
 

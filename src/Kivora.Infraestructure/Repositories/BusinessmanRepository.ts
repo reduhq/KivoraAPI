@@ -46,8 +46,28 @@ export default class BusinessmanRepository implements IBusinessmanRepository {
         })
     }
 
-    Update(_t: BusinessmanUpdateDTO): Promise<Businessman> {
-        throw new Error('Method not implemented.')
+    public async Update(
+        id: number,
+        t: BusinessmanUpdateDTO
+    ): Promise<Businessman> {
+        const businessman = await this.context.businessman.update({
+            select: {
+                id: true,
+                user: true
+            },
+            data: {
+                user: {
+                    update: t.user
+                }
+            },
+            where: {
+                id
+            }
+        })
+        console.log(businessman)
+        return plainToInstance(Businessman, businessman, {
+            excludeExtraneousValues: true
+        })
     }
 
     Delete(_id: number): Promise<boolean> {

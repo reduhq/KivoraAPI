@@ -5,6 +5,7 @@ import IUserService from '../Interfaces/IUserService'
 import UserCreateDTO from '../DTO/UserDTO/UserCreateDTO'
 import UserUpdateDTO from '../DTO/UserDTO/UserUpdateDTO'
 import Security from '../utils/Security'
+import { ROLE } from '@Kivora.Domain/Enums/ROLE'
 
 @injectable()
 export default class UserService implements IUserService {
@@ -49,12 +50,12 @@ export default class UserService implements IUserService {
     public async GetUserByToken(token: string): Promise<User | null> {
         return await this.userRepository.GetUserByToken(token)
     }
-    public async Create(t: UserCreateDTO): Promise<User> {
+    public async Create(t: UserCreateDTO, role?: ROLE): Promise<User> {
         t.password = await Security.HashPassword(t.password)
-        return await this.userRepository.Create(t)
+        return await this.userRepository.Create(t, role)
     }
-    public async Update(t: UserUpdateDTO): Promise<User> {
-        return await this.userRepository.Update(t)
+    public async Update(id: number, t: UserUpdateDTO): Promise<User> {
+        return await this.userRepository.Update(id, t)
     }
     public async Delete(id: number): Promise<boolean> {
         return await this.userRepository.Delete(id)

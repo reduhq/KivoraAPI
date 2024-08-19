@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { controller, httpPost } from 'inversify-express-utils'
+import { controller, httpPatch, httpPost } from 'inversify-express-utils'
 import settings from '../../Settings'
 import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import BusinessmanCreateDTO from '../../../Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanCreateDTO'
@@ -12,6 +12,8 @@ import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
 import IBusinessmanService from '@Kivora.AppCore/Interfaces/IBusinessmanService'
 import JWT from '@Kivora/libs/JWT'
 import Nodemailer from '@Kivora/libs/Nodemailer'
+import BusinessmanUpdateDTO from '@Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanUpdateDTO'
+import JWTMiddleware from '@Kivora/Middlewares/JWTMiddleware'
 
 @controller(`${settings.API_V1_STR}/businessman`)
 export default class BusinessmanController {
@@ -98,5 +100,48 @@ export default class BusinessmanController {
             excludeExtraneousValues: true
         })
         return res.status(200).json(result)
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/businessman:
+     *      patch:
+     *          summary: Update Businessman
+     *          tags: [Businessman]
+     *          security:
+     *              - oAuth2Password: []
+     *          requestBody:
+     *              required: true
+     *              content:
+     *                  application/json:
+     *                      schema:
+     *                          $ref: '#/components/schemas/BusinessmanUpdateDTO'
+     *          responses:
+     *              200:
+     *                  description: The user has been activated successfully
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              type: object
+     *                              properties:
+     *                                  message:
+     *                                      type: string
+     */
+    @httpPatch(
+        '/',
+        JWTMiddleware.VerifyJWT(),
+        ValidationMiddleware.body(BusinessmanUpdateDTO)
+    )
+    public async UpdateBusinessman(
+        req: Request,
+        res: Response
+    ): Promise<Response> {
+        const id: number = res.locals.userId
+        const businessmanUpdate: BusinessmanUpdateDTO = req.body
+        // Updating the businessman
+        await this.businessmanService.Update(id, businessmanUpdate)
+        return res
+            .status(200)
+            .json({ msg: 'Emprendedor actualizado correctamente' })
     }
 }

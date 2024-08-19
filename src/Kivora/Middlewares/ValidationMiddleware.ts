@@ -7,7 +7,8 @@ export default class ValidationMiddleware {
     public static body<T extends object>(dto: new () => T) {
         return (req: Request, res: Response, next: NextFunction) => {
             const modelDTO = plainToClass(dto, req.body, {
-                excludeExtraneousValues: true
+                excludeExtraneousValues: true,
+                exposeUnsetFields: false
             })
 
             validate(modelDTO).then((errors: ValidationError[]) => {
