@@ -1,5 +1,10 @@
 import { Request, Response } from 'express'
-import { controller, httpPatch, httpPost } from 'inversify-express-utils'
+import {
+    controller,
+    httpGet,
+    httpPatch,
+    httpPost
+} from 'inversify-express-utils'
 import settings from '../../Settings'
 import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import BusinessmanCreateDTO from '../../../Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanCreateDTO'
@@ -143,5 +148,35 @@ export default class BusinessmanController {
         return res
             .status(200)
             .json({ msg: 'Emprendedor actualizado correctamente' })
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/businessman/me:
+     *      get:
+     *          summary: Get Current Businessman
+     *          tags: [Businessman]
+     *          security:
+     *              - oAuth2Password: []
+     *          responses:
+     *              200:
+     *                  description: User created successfully
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              $ref: '#/components/schemas/BusinessmanDTO'
+     */
+    @httpGet('/me', JWTMiddleware.VerifyJWT())
+    public async GetCurrentBusinessman(
+        _req: Request,
+        res: Response
+    ): Promise<Response> {
+        const userId = res.locals.userId
+        const businessman = plainToInstance(
+            BusinessmanDTO,
+            await this.businessmanService.GetById(userId),
+            { excludeExtraneousValues: true }
+        )
+        return res.status(200).json(businessman)
     }
 }

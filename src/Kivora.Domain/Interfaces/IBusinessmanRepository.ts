@@ -8,4 +8,6 @@ export default interface IBusinessmanRepository
         Businessman,
         BusinessmanCreateDTO,
         BusinessmanUpdateDTO
-    > {}
+    > {
+    GetById(id: number): Promise<Businessman | null>
+}

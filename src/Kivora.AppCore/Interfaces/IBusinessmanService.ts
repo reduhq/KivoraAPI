@@ -4,4 +4,6 @@ import BusinessmanUpdateDTO from '../DTO/BusinessmanDTO/BusinessmanUpdateDTO'
 import IService from './IService'
 
 export default interface IBusinessmanService
-    extends IService<Businessman, BusinessmanCreateDTO, BusinessmanUpdateDTO> {}
+    extends IService<Businessman, BusinessmanCreateDTO, BusinessmanUpdateDTO> {
+    GetById(id: number): Promise<Businessman | null>
+}

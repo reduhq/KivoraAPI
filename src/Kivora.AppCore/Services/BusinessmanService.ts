@@ -16,6 +16,9 @@ export default class BusinessmanService implements IBusinessmanService {
     ) {
         this.businessmanRepository = businessmanRepository
     }
+    public async GetById(id: number): Promise<Businessman | null> {
+        return await this.businessmanRepository.GetById(id)
+    }
 
     public async Create(t: BusinessmanCreateDTO): Promise<Businessman> {
         t.user.password = await Security.HashPassword(t.user.password)

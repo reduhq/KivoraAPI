@@ -21,6 +21,22 @@ export default class BusinessmanRepository implements IBusinessmanRepository {
         this.context = KivoraContext
     }
 
+    public async GetById(id: number): Promise<Businessman | null> {
+        const businessman = await this.context.businessman.findFirst({
+            select: {
+                id: true,
+                user: true
+            },
+            where: {
+                id
+            }
+        })
+        if (!businessman) return null
+        return plainToInstance(Businessman, businessman, {
+            excludeExtraneousValues: true
+        })
+    }
+
     public async Create(t: BusinessmanCreateDTO): Promise<Businessman> {
         // Creating a new User
         const userCreate: User = await this.userRepository.Create(
@@ -37,10 +53,6 @@ export default class BusinessmanRepository implements IBusinessmanRepository {
                 user: true
             }
         })
-        const u = plainToInstance(Businessman, businessmanCreate, {
-            excludeExtraneousValues: true
-        })
-        console.log(u.id)
         return plainToInstance(Businessman, businessmanCreate, {
             excludeExtraneousValues: true
         })
@@ -64,7 +76,6 @@ export default class BusinessmanRepository implements IBusinessmanRepository {
                 id
             }
         })
-        console.log(businessman)
         return plainToInstance(Businessman, businessman, {
             excludeExtraneousValues: true
         })
