@@ -11,9 +11,9 @@ import { IEmailService } from '../../../Kivora.AppCore/Interfaces/IEmailService'
 import ITokenService from '../../../Kivora.AppCore/Interfaces/ITokenService'
 import { ConfirmAccountDTO } from '../../../Kivora.AppCore/DTO/UserDTO/ConfirmAccountDTO'
 import { query } from 'express-validator'
-import JWT from '@Kivora/libs/JWT'
+import JWT from '@Kivora.Infraestructure/libs/JWT'
 import User from '@Kivora.Domain/Entities/User'
-import Nodemailer from '@Kivora/libs/Nodemailer'
+import Nodemailer from '@Kivora.Infraestructure/libs/Nodemailer'
 
 @controller(`${settings.API_V1_STR}/user`)
 export default class UserController {
