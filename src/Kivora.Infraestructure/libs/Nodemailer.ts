@@ -1,6 +1,6 @@
 // import { promises as fs } from 'fs'
 import nodemailer from 'nodemailer'
-import settings from '@Kivora/Settings'
+import settings from '@Kivora.Infraestructure/Settings'
 import nunjucks from 'nunjucks'
 import path from 'path'
 

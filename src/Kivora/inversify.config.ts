@@ -13,6 +13,8 @@ import ITokenRepository from '@Kivora.Domain/Interfaces/ITokenRepository'
 import TokenRepository from '@Kivora.Infraestructure/Repositories/TokenRepository'
 import { EmailService } from '@Kivora.AppCore/Services/EmailService'
 import { IEmailService } from '@Kivora.AppCore/Interfaces/IEmailService'
+import IImageUploadProvider from '@Kivora.Domain/Interfaces/Providers/IImageUploadProvider'
+import CloudinaryProvider from '@Kivora.Infraestructure/Providers/CloudinaryProvider'
 
 const container = new Container()
 // User
@@ -30,5 +32,9 @@ container.bind<ITokenService>('ITokenService').to(TokenService)
 container.bind<ITokenRepository>('ITokenRepository').to(TokenRepository)
 // Email
 container.bind<IEmailService>('IEmailService').to(EmailService)
+// Image upload provider (CLOUDINARY)
+container
+    .bind<IImageUploadProvider>('IImageUploadProvider')
+    .to(CloudinaryProvider)
 
 export { container }

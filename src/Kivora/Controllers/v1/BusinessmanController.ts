@@ -5,7 +5,7 @@ import {
     httpPatch,
     httpPost
 } from 'inversify-express-utils'
-import settings from '../../Settings'
+import settings from '../../../Kivora.Infraestructure/Settings'
 import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import BusinessmanCreateDTO from '../../../Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanCreateDTO'
 import IBusinessmanRepository from '../../../Kivora.Domain/Interfaces/IBusinessmanRepository'
@@ -19,6 +19,8 @@ import JWT from '@Kivora.Infraestructure/libs/JWT'
 import Nodemailer from '@Kivora.Infraestructure/libs/Nodemailer'
 import BusinessmanUpdateDTO from '@Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanUpdateDTO'
 import JWTMiddleware from '@Kivora/Middlewares/JWTMiddleware'
+import IImageUploadProvider from '@Kivora.Domain/Interfaces/Providers/IImageUploadProvider'
+import MulterMiddleware from '@Kivora/Middlewares/MulterMiddleware'
 
 @controller(`${settings.API_V1_STR}/businessman`)
 export default class BusinessmanController {
@@ -30,15 +32,49 @@ export default class BusinessmanController {
      */
     private businessmanService: IBusinessmanService
     private userService: IUserService
+    private imageUploadProvider: IImageUploadProvider
 
     constructor(
         @inject('IBusinessmanService')
         businessmanService: IBusinessmanRepository,
         @inject('IUserService')
-        userService: IUserService
+        userService: IUserService,
+        @inject('IImageUploadProvider')
+        imageUploadProvider: IImageUploadProvider
     ) {
         this.businessmanService = businessmanService
         this.userService = userService
+        this.imageUploadProvider = imageUploadProvider
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/businessman/me:
+     *      get:
+     *          summary: Get Current Businessman
+     *          tags: [Businessman]
+     *          security:
+     *              - oAuth2Password: []
+     *          responses:
+     *              200:
+     *                  description: User created successfully
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              $ref: '#/components/schemas/BusinessmanDTO'
+     */
+    @httpGet('/me', JWTMiddleware.VerifyJWT())
+    public async GetCurrentBusinessman(
+        _req: Request,
+        res: Response
+    ): Promise<Response> {
+        const userId = res.locals.userId
+        const businessman = plainToInstance(
+            BusinessmanDTO,
+            await this.businessmanService.GetById(userId),
+            { excludeExtraneousValues: true }
+        )
+        return res.status(200).json(businessman)
     }
 
     /**
@@ -152,31 +188,55 @@ export default class BusinessmanController {
 
     /**
      *  @swagger
-     *  /api/v1/businessman/me:
-     *      get:
-     *          summary: Get Current Businessman
+     *  /api/v1/businessman/update-image:
+     *      patch:
+     *          summary: Update the profile picture
      *          tags: [Businessman]
      *          security:
      *              - oAuth2Password: []
+     *          requestBody:
+     *              content:
+     *                  multipart/form-data:
+     *                      schema:
+     *                          type: object
+     *                          properties:
+     *                              orderID:
+     *                                  type: file
+     *                                  required: true
      *          responses:
      *              200:
      *                  description: User created successfully
      *                  content:
      *                      application/json:
      *                          schema:
-     *                              $ref: '#/components/schemas/BusinessmanDTO'
+     *                              type: object
+     *                              properties:
+     *                                  message:
+     *                                      type: string
      */
-    @httpGet('/me', JWTMiddleware.VerifyJWT())
-    public async GetCurrentBusinessman(
-        _req: Request,
-        res: Response
-    ): Promise<Response> {
-        const userId = res.locals.userId
-        const businessman = plainToInstance(
-            BusinessmanDTO,
-            await this.businessmanService.GetById(userId),
-            { excludeExtraneousValues: true }
+    @httpPatch(
+        '/update-image',
+        JWTMiddleware.VerifyJWT(),
+        MulterMiddleware.UploadImage().single('orderID')
+    )
+    public async UpdateImage(req: Request, res: Response) {
+        const userId: number = res.locals.userId
+        const image: Express.Multer.File | undefined = req.file
+        if (!image) {
+            return res.status(404).json('Solicitud no valida')
+        }
+        // Uploading the profile picture
+        const imageURL = await this.imageUploadProvider.UploadImage(
+            image.buffer
         )
-        return res.status(200).json(businessman)
+        if (!imageURL) {
+            return res
+                .status(404)
+                .json('Ha ocurrido un error al subir la imagen')
+        }
+        // Saving the profile picture in the DB
+        await this.userService.UpdateProfilePicture(userId, imageURL)
+
+        return res.status(200).json('Foto de perfil actualizada')
     }
 }

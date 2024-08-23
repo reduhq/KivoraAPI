@@ -1,5 +1,5 @@
 import { sign, verify } from 'jsonwebtoken'
-import settings from '../../Kivora/Settings'
+import settings from '../Settings'
 
 export default class JWT {
     // JWT

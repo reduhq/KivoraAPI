@@ -36,6 +36,13 @@ class Settings {
         }
         return false
     }
+
+    public readonly CLOUDINARY_API_KEY: string = process.env
+        .CLOUDINARY_API_KEY as string
+    public readonly CLOUDINARY_API_SECRET: string = process.env
+        .CLOUDINARY_API_SECRET as string
+    public readonly CLOUDINARY_CLOUD_NAME: string = process.env
+        .CLOUDINARY_CLOUD_NAME as string
 }
 
 const settings = new Settings()

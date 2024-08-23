@@ -6,7 +6,7 @@ import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import UserCreateDTO from '../../../Kivora.AppCore/DTO/UserDTO/UserCreateDTO'
 import UserDTO from '../../../Kivora.AppCore/DTO/UserDTO/UserDTO'
 import { plainToInstance } from 'class-transformer'
-import settings from '../../Settings'
+import settings from '../../../Kivora.Infraestructure/Settings'
 import { IEmailService } from '../../../Kivora.AppCore/Interfaces/IEmailService'
 import ITokenService from '../../../Kivora.AppCore/Interfaces/ITokenService'
 import { ConfirmAccountDTO } from '../../../Kivora.AppCore/DTO/UserDTO/ConfirmAccountDTO'
@@ -35,6 +35,35 @@ export default class UserController {
         this.userService = userService
         this.emailService = emailService
         this.tokenService = tokenService
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/user:
+     *      get:
+     *          summary: Get all registered users
+     *          security: []
+     *          tags: [User]
+     *          responses:
+     *              200:
+     *                  description: List of users
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              type: array
+     *                              items:
+     *                                  $ref: '#/components/schemas/UserDTO'
+     */
+    @httpGet('/')
+    public async getAll(_req: Request, res: Response) {
+        // Getting all the Users
+        const users = await this.userService.GetAll()
+
+        // Returning a list of UserDTO
+        const response = plainToInstance(UserDTO, users, {
+            excludeExtraneousValues: true
+        })
+        return res.status(200).json(response)
     }
 
     /**
@@ -212,34 +241,5 @@ export default class UserController {
         )
         // Returning the response
         return res.json({ msg: 'El usuario ha sido activado exitosamente' })
-    }
-
-    /**
-     *  @swagger
-     *  /api/v1/user:
-     *      get:
-     *          summary: Get all registered users
-     *          security: []
-     *          tags: [User]
-     *          responses:
-     *              200:
-     *                  description: List of users
-     *                  content:
-     *                      application/json:
-     *                          schema:
-     *                              type: array
-     *                              items:
-     *                                  $ref: '#/components/schemas/UserDTO'
-     */
-    @httpGet('/')
-    public async getAll(_req: Request, res: Response) {
-        // Getting all the Users
-        const users = await this.userService.GetAll()
-
-        // Returning a list of UserDTO
-        const response = plainToInstance(UserDTO, users, {
-            excludeExtraneousValues: true
-        })
-        return res.status(200).json(response)
     }
 }

@@ -16,6 +16,21 @@ export default class UserRepository implements IUserRepository {
         this.context = KivoraContext
     }
 
+    public async UpdateProfilePicture(
+        userId: number,
+        url: string
+    ): Promise<boolean> {
+        await this.context.user.update({
+            data: {
+                profilePicture: url
+            },
+            where: {
+                id: userId
+            }
+        })
+        return true
+    }
+
     public async ActivateUser(id: number): Promise<User> {
         const user = await this.context.user.update({
             where: {

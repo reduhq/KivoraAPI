@@ -1,7 +1,7 @@
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUI from 'swagger-ui-express'
 import express from 'express'
-import settings from './Settings'
+import settings from '../Kivora.Infraestructure/Settings'
 
 // Metadata info about our API
 const options = {

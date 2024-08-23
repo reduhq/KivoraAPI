@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import { controller, httpGet, httpPost } from 'inversify-express-utils'
+import { controller, httpPost } from 'inversify-express-utils'
 import IUserService from '../../../Kivora.AppCore/Interfaces/IUserService'
 import { inject } from 'inversify'
-import settings from '../../Settings'
+import settings from '../../../Kivora.Infraestructure/Settings'
 import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import JWT from '../../../Kivora.Infraestructure/libs/JWT'
 import AuthDTO from '../../../Kivora.AppCore/DTO/UserDTO/AuthDTO'
@@ -112,22 +112,5 @@ export default class LoginController {
             ),
             token_type: 'bearer'
         })
-    }
-
-    /**
-     * @swagger
-     * /api/v1/protected:
-     *   get:
-     *     summary: Protected endpoint
-     *     description: This endpoint requires a valid JWT token
-     *     security:
-     *       - bearerAuth: []
-     *     tags:
-     *       - Protected
-     */
-    @httpGet('/protected')
-    public async a(_req: Request, _res: Response) {
-        // Lógica para endpoint protegido
-        console.log('protegido diuuuuuuuuuuuu')
     }
 }

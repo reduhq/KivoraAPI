@@ -15,6 +15,13 @@ export default class UserService implements IUserService {
         this.userRepository = userRepository
     }
 
+    public async UpdateProfilePicture(
+        userId: number,
+        url: string
+    ): Promise<boolean> {
+        return await this.userRepository.UpdateProfilePicture(userId, url)
+    }
+
     public async ActivateUser(id: number): Promise<User> {
         return await this.userRepository.ActivateUser(id)
     }

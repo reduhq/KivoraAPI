@@ -1,4 +1,4 @@
-import settings from '@Kivora/Settings'
+import settings from '@Kivora.Infraestructure/Settings'
 import { Request, Response, NextFunction } from 'express'
 import { verify } from 'jsonwebtoken'
 
