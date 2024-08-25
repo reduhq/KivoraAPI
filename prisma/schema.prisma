@@ -19,6 +19,12 @@ enum ROLE {
   BUSINESSMAN
 }
 
+enum PRODUCT_STATE {
+  AVAILABLE
+  OUT_OF_STOCK
+  DISABLED
+}
+
 model User {
   id             Int      @id @default(autoincrement())
   username       String   @unique
@@ -53,4 +59,16 @@ model Businessman {
   id Int @unique
 
   user User @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Product {
+  id          Int           @id @default(autoincrement())
+  businessId  Int           @unique
+  name        String
+  description String
+  price       Float
+  quantity    Int
+  rate        Int
+  state       PRODUCT_STATE
+  tags        String
 }
