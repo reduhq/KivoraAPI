@@ -15,6 +15,10 @@ import { EmailService } from '@Kivora.AppCore/Services/EmailService'
 import { IEmailService } from '@Kivora.AppCore/Interfaces/IEmailService'
 import IImageUploadProvider from '@Kivora.Domain/Interfaces/Providers/IImageUploadProvider'
 import CloudinaryProvider from '@Kivora.Infraestructure/Providers/CloudinaryProvider'
+import IProductService from '@Kivora.AppCore/Interfaces/IProductService'
+import ProductService from '@Kivora.AppCore/Services/ProductService'
+import IProductRepository from '@Kivora.Domain/Interfaces/IProductRepository'
+import ProductRepository from '@Kivora.Infraestructure/Repositories/ProductRepository'
 
 const container = new Container()
 // User
@@ -36,5 +40,8 @@ container.bind<IEmailService>('IEmailService').to(EmailService)
 container
     .bind<IImageUploadProvider>('IImageUploadProvider')
     .to(CloudinaryProvider)
+// Product
+container.bind<IProductService>('IProductService').to(ProductService)
+container.bind<IProductRepository>('IProductRepository').to(ProductRepository)
 
 export { container }
