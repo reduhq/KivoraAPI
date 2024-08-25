@@ -1,6 +1,6 @@
 import { ROLE } from '@Kivora.Domain/Enums/ROLE'
-import UserCreateDTO from '../../Kivora.AppCore/DTO/UserDTO/UserCreateDTO'
-import UserUpdateDTO from '../../Kivora.AppCore/DTO/UserDTO/UserUpdateDTO'
+import UserCreateDTO from '../DTO/UserDTO/UserCreateDTO'
+import UserUpdateDTO from '../DTO/UserDTO/UserUpdateDTO'
 import User from '../Entities/User'
 import IRepository from './IRepository'
 

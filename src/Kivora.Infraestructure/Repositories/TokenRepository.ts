@@ -1,4 +1,4 @@
-import ITokenCreateDTO from '../../Kivora.AppCore/DTO/TokenDTO/TokenCreateDTO'
+import ITokenCreateDTO from '../../Kivora.Domain/DTO/TokenDTO/TokenCreateDTO'
 import ITokenRepository from '../../Kivora.Domain/Interfaces/ITokenRepository'
 import { PrismaClient, Token } from '@prisma/client'
 import { injectable } from 'inversify'

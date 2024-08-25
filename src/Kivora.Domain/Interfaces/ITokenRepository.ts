@@ -1,4 +1,4 @@
-import ITokenCreateDTO from '@Kivora.AppCore/DTO/TokenDTO/TokenCreateDTO'
+import ITokenCreateDTO from '@Kivora.Domain/DTO/TokenDTO/TokenCreateDTO'
 import { Token } from '@prisma/client'
 
 export default interface ITokenRepository {

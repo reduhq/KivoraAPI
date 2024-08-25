@@ -5,7 +5,7 @@ import { inject } from 'inversify'
 import settings from '../../../Kivora.Infraestructure/Settings'
 import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import JWT from '../../../Kivora.Infraestructure/libs/JWT'
-import AuthDTO from '../../../Kivora.AppCore/DTO/UserDTO/AuthDTO'
+import AuthDTO from '../../../Kivora.Domain/DTO/UserDTO/AuthDTO'
 import ITokenService from '@Kivora.AppCore/Interfaces/ITokenService'
 import { IEmailService } from '@Kivora.AppCore/Interfaces/IEmailService'
 

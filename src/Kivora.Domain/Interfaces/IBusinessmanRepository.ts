@@ -1,5 +1,5 @@
-import BusinessmanCreateDTO from '../../Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanCreateDTO'
-import BusinessmanUpdateDTO from '../../Kivora.AppCore/DTO/BusinessmanDTO/BusinessmanUpdateDTO'
+import BusinessmanCreateDTO from '../DTO/BusinessmanDTO/BusinessmanCreateDTO'
+import BusinessmanUpdateDTO from '../DTO/BusinessmanDTO/BusinessmanUpdateDTO'
 import Businessman from '../../Kivora.Domain/Entities/Businessman'
 import IRepository from './IRepository'
 

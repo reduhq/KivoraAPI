@@ -4,8 +4,8 @@ import IUserRepository from '../../Kivora.Domain/Interfaces/IUserRepository'
 import { KivoraContext } from '../../Kivora.Domain/KivoraContext'
 import { injectable } from 'inversify'
 import { plainToInstance } from 'class-transformer'
-import UserCreateDTO from '../../Kivora.AppCore/DTO/UserDTO/UserCreateDTO'
-import UserUpdateDTO from '../../Kivora.AppCore/DTO/UserDTO/UserUpdateDTO'
+import UserCreateDTO from '../../Kivora.Domain/DTO/UserDTO/UserCreateDTO'
+import UserUpdateDTO from '../../Kivora.Domain/DTO/UserDTO/UserUpdateDTO'
 import { ROLE } from '@Kivora.Domain/Enums/ROLE'
 
 @injectable()

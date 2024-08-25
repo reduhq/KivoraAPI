@@ -1,6 +1,6 @@
 import User from '../../Kivora.Domain/Entities/User'
-import UserCreateDTO from '../DTO/UserDTO/UserCreateDTO'
-import UserUpdateDTO from '../DTO/UserDTO/UserUpdateDTO'
+import UserCreateDTO from '../../Kivora.Domain/DTO/UserDTO/UserCreateDTO'
+import UserUpdateDTO from '../../Kivora.Domain/DTO/UserDTO/UserUpdateDTO'
 import IService from './IService'
 
 export default interface IUserService
