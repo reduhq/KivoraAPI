@@ -25,6 +25,7 @@ cloudinary.config({
 import './Controllers/v1/UserController'
 import './Controllers/v1/LoginController'
 import './Controllers/v1/BusinessmanController'
+import './Controllers/v1/ProductController'
 
 const app = server.build()
 

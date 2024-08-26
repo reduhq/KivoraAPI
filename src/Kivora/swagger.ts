@@ -31,7 +31,7 @@ const options = {
             // }
         ]
     },
-    apis: ['./src/Kivora.AppCore/DTO/*/*', './src/Kivora/Controllers/v1/*']
+    apis: ['./src/Kivora.Domain/DTO/*/*', './src/Kivora/Controllers/v1/*']
 }
 
 // Docs en JSON format

@@ -19,13 +19,7 @@ enum ROLE {
   BUSINESSMAN
 }
 
-enum PRODUCT_STATE {
-  DISPONIBLE
-  AGOTADO
-  DESACTIVADO
-}
-
-  model User {
+model User {
   id             Int      @id @default(autoincrement())
   username       String   @unique
   password       String   @db.VarChar(60)
@@ -62,13 +56,13 @@ model Businessman {
 }
 
 model Product {
-  id          Int           @id @default(autoincrement())
-  businessId  Int           @unique
+  id          Int     @id @default(autoincrement())
+  businessId  Int
   name        String
   description String
   price       Float
-  quantity    Int
-  rate        Int
-  state       PRODUCT_STATE
+  stock       Int
+  rate        Int     @default(0)
+  isActive    Boolean @default(true)
   tags        String
 }
