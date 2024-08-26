@@ -27,7 +27,7 @@ export default class ProductService implements IProductService {
         throw new Error('Method not implemented.')
     }
 
-    GetAll(): Promise<Product[]> {
-        throw new Error('Method not implemented.')
+    public async GetAll(): Promise<Product[]> {
+        return await this.productRepository.GetAll()
     }
 }

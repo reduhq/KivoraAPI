@@ -4,7 +4,7 @@ import ProductCreateDTO from '@Kivora.Domain/DTO/ProductDTO/ProductCreateDTO'
 import settings from '@Kivora.Infraestructure/Settings'
 import ValidationMiddleware from '@Kivora/Middlewares/ValidationMiddleware'
 import { inject } from 'inversify'
-import { controller, httpPost } from 'inversify-express-utils'
+import { controller, httpGet, httpPost } from 'inversify-express-utils'
 import Product from '@Kivora.Domain/Entities/Product'
 import { plainToInstance } from 'class-transformer'
 import ProductDTO from '@Kivora.Domain/DTO/ProductDTO/ProductDTO'
@@ -22,6 +22,29 @@ export default class ProductController {
 
     constructor(@inject('IProductService') productService: IProductService) {
         this.productService = productService
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/product:
+     *      get:
+     *          summary: Get all registered products
+     *          tags: [Product]
+     *          responses:
+     *              200:
+     *                  description: List of products
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              type: array
+     *                              items:
+     *                                  $ref: '#/components/schemas/ProductDTO'
+     */
+    @httpGet('/')
+    public async GetAll(_req: Request, res: Response): Promise<Response> {
+        const products = await this.productService.GetAll()
+        const result = plainToInstance(Product, products)
+        return res.status(200).json(result)
     }
 
     /**

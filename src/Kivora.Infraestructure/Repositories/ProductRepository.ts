@@ -32,7 +32,8 @@ export default class ProductRepository implements IProductRepository {
         throw new Error('Method not implemented.')
     }
 
-    GetAll(): Promise<Product[]> {
-        throw new Error('Method not implemented.')
+    public async GetAll(): Promise<Product[]> {
+        const product = await this.context.product.findMany()
+        return plainToInstance(Product, product)
     }
 }
