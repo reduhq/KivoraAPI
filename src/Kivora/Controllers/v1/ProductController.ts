@@ -4,11 +4,18 @@ import ProductCreateDTO from '@Kivora.Domain/DTO/ProductDTO/ProductCreateDTO'
 import settings from '@Kivora.Infraestructure/Settings'
 import ValidationMiddleware from '@Kivora/Middlewares/ValidationMiddleware'
 import { inject } from 'inversify'
-import { controller, httpGet, httpPost } from 'inversify-express-utils'
+import {
+    controller,
+    httpGet,
+    httpPatch,
+    httpPost
+} from 'inversify-express-utils'
 import Product from '@Kivora.Domain/Entities/Product'
 import { plainToInstance } from 'class-transformer'
 import ProductDTO from '@Kivora.Domain/DTO/ProductDTO/ProductDTO'
 import JWTMiddleware from '@Kivora/Middlewares/JWTMiddleware'
+import { param } from 'express-validator'
+import ProductUpdateDTO from '@Kivora.Domain/DTO/ProductDTO/ProductUpdateDTO'
 
 @controller(`${settings.API_V1_STR}/product`)
 export default class ProductController {
@@ -84,5 +91,31 @@ export default class ProductController {
             excludeExtraneousValues: true
         })
         return res.status(200).json(response)
+    }
+
+    @httpPatch(
+        '/:id',
+        param('id')
+            .isNumeric()
+            .withMessage('El id tiene que ser un numero')
+            .exists()
+            .withMessage('El id es obligatorio')
+            .notEmpty()
+            .withMessage('El id no puede estar vacio'),
+        ValidationMiddleware.validate(),
+        ValidationMiddleware.body(ProductUpdateDTO)
+    )
+    public async Update(req: Request, res: Response): Promise<Response> {
+        const id: number = parseInt(req.params.id)
+        const productUpdate: ProductUpdateDTO = req.body
+        // Updating the product
+        const product = await this.productService.Update(id, productUpdate)
+        if (!product) {
+            return res.status(400).json({ msg: 'error' })
+        }
+        // Returning the response
+        return res
+            .status(200)
+            .json({ meg: 'El Producto ha sido actualizado exitosamente' })
     }
 }

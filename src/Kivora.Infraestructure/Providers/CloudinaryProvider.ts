@@ -15,7 +15,6 @@ export default class CloudinaryProvider implements IImageUploadProvider {
                             resolve(result)
                         }
                     )
-
                     // Terminar el stream con el buffer
                     uploadStream.end(image)
                 })

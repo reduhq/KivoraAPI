@@ -24,8 +24,16 @@ export default class ProductRepository implements IProductRepository {
         })
     }
 
-    Update(_id: number, _t: ProductUpdateDTO): Promise<Product> {
-        throw new Error('Method not implemented.')
+    public async Update(id: number, t: ProductUpdateDTO): Promise<Product> {
+        const product = await this.context.product.update({
+            data: t,
+            where: {
+                id
+            }
+        })
+        return plainToInstance(Product, product, {
+            excludeExtraneousValues: true
+        })
     }
 
     Delete(_id: number): Promise<boolean> {

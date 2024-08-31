@@ -19,8 +19,8 @@ export default class ProductService implements IProductService {
         return this.productRepository.Create(t)
     }
 
-    Update(_id: number, _t: ProductUpdateDTO): Promise<Product> {
-        throw new Error('Method not implemented.')
+    public async Update(id: number, t: ProductUpdateDTO): Promise<Product> {
+        return await this.productRepository.Update(id, t)
     }
 
     Delete(_id: number): Promise<boolean> {
