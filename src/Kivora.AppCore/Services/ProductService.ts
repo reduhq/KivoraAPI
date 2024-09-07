@@ -23,8 +23,8 @@ export default class ProductService implements IProductService {
         return await this.productRepository.Update(id, t)
     }
 
-    Delete(_id: number): Promise<boolean> {
-        throw new Error('Method not implemented.')
+    public async Delete(id: number): Promise<boolean> {
+        return this.productRepository.Delete(id)
     }
 
     public async GetAll(): Promise<Product[]> {

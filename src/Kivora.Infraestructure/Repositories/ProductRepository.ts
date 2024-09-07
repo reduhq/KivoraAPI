@@ -36,8 +36,14 @@ export default class ProductRepository implements IProductRepository {
         })
     }
 
-    Delete(_id: number): Promise<boolean> {
-        throw new Error('Method not implemented.')
+    public async Delete(id: number): Promise<boolean> {
+        const product = await this.context.product.delete({
+            where: {
+                id
+            }
+        })
+        if (!product) return false
+        return true
     }
 
     public async GetAll(): Promise<Product[]> {

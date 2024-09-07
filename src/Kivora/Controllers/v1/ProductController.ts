@@ -6,6 +6,7 @@ import ValidationMiddleware from '@Kivora/Middlewares/ValidationMiddleware'
 import { inject } from 'inversify'
 import {
     controller,
+    httpDelete,
     httpGet,
     httpPatch,
     httpPost
@@ -78,7 +79,7 @@ export default class ProductController {
      */
     @httpPost(
         '/',
-        JWTMiddleware.VerifyJWT(),
+        JWTMiddleware.GetCurrentBusinessman(),
         ValidationMiddleware.body(ProductCreateDTO)
     )
     public async Create(req: Request, res: Response): Promise<Response> {
@@ -117,5 +118,51 @@ export default class ProductController {
         return res
             .status(200)
             .json({ meg: 'El Producto ha sido actualizado exitosamente' })
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/product/:id:
+     *      delete:
+     *          summary: Delete a product
+     *          security:
+     *              - oAuth2Password: []
+     *          tags: [Product]
+     *          requestBody:
+     *              required: true
+     *              content:
+     *                  application/json:
+     *                      schema:
+     *                          $ref: '#/components/schemas/ProductCreateDTO'
+     *          responses:
+     *              200:
+     *                  description: User created successfully
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              $ref: '#/components/schemas/ProductDTO'
+     */
+    @httpDelete(
+        '/:id',
+        param('id')
+            .isNumeric()
+            .withMessage('El id tiene que ser un numero')
+            .exists()
+            .withMessage('El id es obligatorio')
+            .notEmpty()
+            .withMessage('El id no puede estar vacio'),
+        ValidationMiddleware.validate()
+        // JWTMiddleware.VerifyJWT()
+    )
+    public async Delete(req: Request, res: Response): Promise<Response> {
+        const id: number = parseInt(req.params.id)
+        const product = await this.productService.Delete(id)
+        if (!product)
+            return res
+                .status(400)
+                .json('El producto que se quiere eliminar no existe')
+        return res
+            .status(200)
+            .json('El producto ha sido eliminado exitosamente')
     }
 }

@@ -63,11 +63,12 @@ export default class BusinessmanController {
      *                          schema:
      *                              $ref: '#/components/schemas/BusinessmanDTO'
      */
-    @httpGet('/me', JWTMiddleware.VerifyJWT())
+    @httpGet('/me', JWTMiddleware.GetCurrentBusinessman())
     public async GetCurrentBusinessman(
         _req: Request,
         res: Response
     ): Promise<Response> {
+        // TODO: read the current businessman from res.locals.currentUser
         const userId = res.locals.userId
         const businessman = plainToInstance(
             BusinessmanDTO,
@@ -170,13 +171,14 @@ export default class BusinessmanController {
      */
     @httpPatch(
         '/',
-        JWTMiddleware.VerifyJWT(),
+        JWTMiddleware.GetCurrentBusinessman(),
         ValidationMiddleware.body(BusinessmanUpdateDTO)
     )
     public async UpdateBusinessman(
         req: Request,
         res: Response
     ): Promise<Response> {
+        // TODO: read the current businessman from res.locals.currentUser
         const id: number = res.locals.userId
         const businessmanUpdate: BusinessmanUpdateDTO = req.body
         // Updating the businessman
@@ -216,10 +218,11 @@ export default class BusinessmanController {
      */
     @httpPatch(
         '/update-image',
-        JWTMiddleware.VerifyJWT(),
+        JWTMiddleware.GetCurrentBusinessman(),
         MulterMiddleware.UploadImage().single('orderID')
     )
     public async UpdateImage(req: Request, res: Response) {
+        // TODO: read the current businessman from res.locals.currentUser
         const userId: number = res.locals.userId
         const image: Express.Multer.File | undefined = req.file
         if (!image) {
