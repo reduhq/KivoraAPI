@@ -63,19 +63,16 @@ export default class BusinessmanController {
      *                          schema:
      *                              $ref: '#/components/schemas/BusinessmanDTO'
      */
-    @httpGet('/me', JWTMiddleware.GetCurrentBusinessman())
+    @httpGet('/me', JWTMiddleware.GetCurrentBusinessman(true))
     public async GetCurrentBusinessman(
         _req: Request,
         res: Response
     ): Promise<Response> {
-        // TODO: read the current businessman from res.locals.currentUser
-        const userId = res.locals.userId
-        const businessman = plainToInstance(
-            BusinessmanDTO,
-            await this.businessmanService.GetById(userId),
-            { excludeExtraneousValues: true }
-        )
-        return res.status(200).json(businessman)
+        const businessman: Businessman = res.locals.businessmanModel
+        const response = plainToInstance(BusinessmanDTO, businessman, {
+            excludeExtraneousValues: true
+        })
+        return res.status(200).json(response)
     }
 
     /**
