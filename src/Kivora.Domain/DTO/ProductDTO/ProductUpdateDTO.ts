@@ -5,7 +5,7 @@ import { IsOptional } from 'class-validator'
  *  @swagger
  *  components:
  *      schemas:
- *          ProductDTO:
+ *          ProductUpdateDTO:
  *              type: object
  *              properties:
  *                  name:

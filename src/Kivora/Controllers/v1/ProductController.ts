@@ -94,8 +94,40 @@ export default class ProductController {
         return res.status(200).json(response)
     }
 
+    /**
+     *  @swagger
+     *  /api/v1/product/{id}:
+     *      patch:
+     *          summary: Update a product
+     *          security:
+     *              - oAuth2Password: []
+     *          tags: [Product]
+     *          parameters:
+     *              -   in: path
+     *                  name: id
+     *                  required: true
+     *                  schema:
+     *                      type: integer
+     *          requestBody:
+     *              required: true
+     *              content:
+     *                  application/json:
+     *                      schema:
+     *                          $ref: '#/components/schemas/ProductUpdateDTO'
+     *          responses:
+     *              200:
+     *                  description: Product updated successfully
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              type: object
+     *                              properties:
+     *                                  message:
+     *                                      type: string
+     */
     @httpPatch(
         '/:id',
+        JWTMiddleware.GetCurrentBusinessman(),
         param('id')
             .isNumeric()
             .withMessage('El id tiene que ser un numero')
@@ -122,25 +154,28 @@ export default class ProductController {
 
     /**
      *  @swagger
-     *  /api/v1/product/:id:
+     *  /api/v1/product/{id}:
      *      delete:
      *          summary: Delete a product
      *          security:
      *              - oAuth2Password: []
      *          tags: [Product]
-     *          requestBody:
-     *              required: true
-     *              content:
-     *                  application/json:
-     *                      schema:
-     *                          $ref: '#/components/schemas/ProductCreateDTO'
+     *          parameters:
+     *              -   in: path
+     *                  name: id
+     *                  required: true
+     *                  schema:
+     *                      type: integer
      *          responses:
      *              200:
-     *                  description: User created successfully
+     *                  description: Product deleted successfully
      *                  content:
      *                      application/json:
      *                          schema:
-     *                              $ref: '#/components/schemas/ProductDTO'
+     *                              type: object
+     *                              properties:
+     *                                  message:
+     *                                      type: string
      */
     @httpDelete(
         '/:id',
@@ -151,8 +186,8 @@ export default class ProductController {
             .withMessage('El id es obligatorio')
             .notEmpty()
             .withMessage('El id no puede estar vacio'),
-        ValidationMiddleware.validate()
-        // JWTMiddleware.VerifyJWT()
+        ValidationMiddleware.validate(),
+        JWTMiddleware.GetCurrentBusinessman()
     )
     public async Delete(req: Request, res: Response): Promise<Response> {
         const id: number = parseInt(req.params.id)

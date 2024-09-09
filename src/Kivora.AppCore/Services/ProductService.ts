@@ -19,11 +19,22 @@ export default class ProductService implements IProductService {
         return this.productRepository.Create(t)
     }
 
-    public async Update(id: number, t: ProductUpdateDTO): Promise<Product> {
+    public async Update(
+        id: number,
+        t: ProductUpdateDTO
+    ): Promise<Product | null> {
+        // validating if the product exists
+        const product = await this.productRepository.GetById(id)
+        if (!product) return null
+        // updating the product
         return await this.productRepository.Update(id, t)
     }
 
     public async Delete(id: number): Promise<boolean> {
+        // validating if the product exists
+        const product = await this.productRepository.GetById(id)
+        if (!product) return false
+        // deleting the product
         return this.productRepository.Delete(id)
     }
 

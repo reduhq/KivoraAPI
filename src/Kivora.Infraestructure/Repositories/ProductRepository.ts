@@ -15,6 +15,18 @@ export default class ProductRepository implements IProductRepository {
         this.context = KivoraContext
     }
 
+    public async GetById(id: number): Promise<Product | null> {
+        const product = await this.context.product.findFirst({
+            where: {
+                id
+            }
+        })
+        if (!product) return null
+        return plainToInstance(Product, product, {
+            excludeExtraneousValues: true
+        })
+    }
+
     public async Create(t: ProductCreateDTO): Promise<Product> {
         const product = await this.context.product.create({
             data: t
@@ -42,8 +54,7 @@ export default class ProductRepository implements IProductRepository {
                 id
             }
         })
-        if (!product) return false
-        return true
+        return !!product
     }
 
     public async GetAll(): Promise<Product[]> {
