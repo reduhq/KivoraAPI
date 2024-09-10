@@ -7,13 +7,12 @@ import UserCreateDTO from '../../../Kivora.Domain/DTO/UserDTO/UserCreateDTO'
 import UserDTO from '../../../Kivora.Domain/DTO/UserDTO/UserDTO'
 import { plainToInstance } from 'class-transformer'
 import settings from '../../../Kivora.Infraestructure/Settings'
-import { IEmailService } from '../../../Kivora.AppCore/Interfaces/IEmailService'
 import ITokenService from '../../../Kivora.AppCore/Interfaces/ITokenService'
 import { ConfirmAccountDTO } from '../../../Kivora.Domain/DTO/UserDTO/ConfirmAccountDTO'
 import { query } from 'express-validator'
 import JWT from '@Kivora.Infraestructure/libs/JWT'
 import User from '@Kivora.Domain/Entities/User'
-import Nodemailer from '@Kivora.Infraestructure/libs/Nodemailer'
+import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
 
 @controller(`${settings.API_V1_STR}/user`)
 export default class UserController {
@@ -24,16 +23,16 @@ export default class UserController {
      *      description: Gestión de usuarios
      */
     private userService: IUserService
-    private emailService: IEmailService
+    private nodeMailerProvider: INodemailerProvider
     private tokenService: ITokenService
 
     constructor(
         @inject('IUserService') userService: IUserService,
-        @inject('IEmailService') emailService: IEmailService,
+        @inject('INodemailerProvider') nodeMailerProvider: INodemailerProvider,
         @inject('ITokenService') tokenService: ITokenService
     ) {
         this.userService = userService
-        this.emailService = emailService
+        this.nodeMailerProvider = nodeMailerProvider
         this.tokenService = tokenService
     }
 
@@ -113,7 +112,7 @@ export default class UserController {
         const token = await this.tokenService.GenerateToken(newUser.id)
 
         // Confirmation Email
-        await this.emailService.sendConfirmationEmail({
+        await this.nodeMailerProvider.sendConfirmationEmail({
             email: newUser.email,
             name: newUser.username,
             token: token.token
@@ -235,7 +234,7 @@ export default class UserController {
         // Activating the user account
         const activatedUser: User = await this.userService.ActivateUser(userId)
         // Sending a welcome email
-        await Nodemailer.SendWelcomeEmail(
+        await this.nodeMailerProvider.SendWelcomeEmail(
             activatedUser.email,
             activatedUser.username
         )

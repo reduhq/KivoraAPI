@@ -7,7 +7,7 @@ import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import JWT from '../../../Kivora.Infraestructure/libs/JWT'
 import AuthDTO from '../../../Kivora.Domain/DTO/UserDTO/AuthDTO'
 import ITokenService from '@Kivora.AppCore/Interfaces/ITokenService'
-import { IEmailService } from '@Kivora.AppCore/Interfaces/IEmailService'
+import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
 
 @controller(`${settings.API_V1_STR}`)
 export default class LoginController {
@@ -19,16 +19,16 @@ export default class LoginController {
      */
     private userService: IUserService
     private tokenService: ITokenService
-    private emailService: IEmailService
+    private nodeMailerProvider: INodemailerProvider
 
     constructor(
         @inject('IUserService') userService: IUserService,
         @inject('ITokenService') tokenService: ITokenService,
-        @inject('IEmailService') emailService: IEmailService
+        @inject('INodemailerProvider') nodeMailerProvider: INodemailerProvider
     ) {
         this.userService = userService
         this.tokenService = tokenService
-        this.emailService = emailService
+        this.nodeMailerProvider = nodeMailerProvider
     }
     /**
      *  @swagger
@@ -88,7 +88,7 @@ export default class LoginController {
                 usernameExist.id
             )
             // Confirmation Email
-            await this.emailService.sendConfirmationEmail({
+            await this.nodeMailerProvider.sendConfirmationEmail({
                 email: usernameExist.email,
                 name: usernameExist.username,
                 token: token.token

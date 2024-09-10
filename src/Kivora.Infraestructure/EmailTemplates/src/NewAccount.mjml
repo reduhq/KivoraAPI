@@ -2,18 +2,19 @@
     <mj-body background-color="#000">
         <mj-section>
             <mj-column>
-                <mj-text color="#fff" align="center">
-                    KIVORA
-                </mj-text>
+                <mj-text color="#fff" align="center"> KIVORA </mj-text>
                 <mj-divider border-color="#555" border-width="1px"></mj-divider>
                 <mj-text color="#fff" align="center">
                     Ya casi está todo listo para usar tu cuenta.
                 </mj-text>
                 <mj-text color="#fff" align="center">
-                    Tu cuenta de Kivora ha sido creada. Solo necesitamos que verifiques tu dirección de Email para completar tu registro.
+                    Tu cuenta de Kivora ha sido creada. Solo necesitamos que
+                    verifiques tu dirección de Email para completar tu registro.
                 </mj-text>
-                <mj-button background-color="#ff45ec"
-                    href="{{link}}" font-weight="bold"
+                <mj-button
+                    background-color="#ff45ec"
+                    href="{{link}}"
+                    font-weight="bold"
                 >
                     Verifica tu Email
                 </mj-button>
@@ -24,13 +25,14 @@
                     <a href="{{link}}">{{link}}</a>
                 </mj-text>
                 <mj-text color="#fff">
-                    El link / botón para verificar tu email expirarán en {{valid_minutes}} minutos.
+                    El link / botón para verificar tu email expirarán en
+                    {{valid_minutes}} minutos.
                 </mj-text>
                 <mj-text color="#FFF">
                     Si no te has registrado en Kivora, ignora este email.
                 </mj-text>
                 <mj-text color="#FFF">
-                    Gracias,<br>El equipo de Kivora.
+                    Gracias,<br />El equipo de Kivora.
                 </mj-text>
             </mj-column>
         </mj-section>
