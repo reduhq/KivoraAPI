@@ -11,14 +11,14 @@ import ITokenService from '@Kivora.AppCore/Interfaces/ITokenService'
 import TokenService from '@Kivora.AppCore/Services/TokenService'
 import ITokenRepository from '@Kivora.Domain/Interfaces/ITokenRepository'
 import TokenRepository from '@Kivora.Infraestructure/Repositories/TokenRepository'
-import { EmailService } from '@Kivora.AppCore/Services/EmailService'
-import { IEmailService } from '@Kivora.AppCore/Interfaces/IEmailService'
 import IImageUploadProvider from '@Kivora.Domain/Interfaces/Providers/IImageUploadProvider'
 import CloudinaryProvider from '@Kivora.Infraestructure/Providers/CloudinaryProvider'
 import IProductService from '@Kivora.AppCore/Interfaces/IProductService'
 import ProductService from '@Kivora.AppCore/Services/ProductService'
 import IProductRepository from '@Kivora.Domain/Interfaces/IProductRepository'
 import ProductRepository from '@Kivora.Infraestructure/Repositories/ProductRepository'
+import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
+import NodemailerProvider from '@Kivora.Infraestructure/Providers/NodemailerProvider'
 
 const container = new Container()
 // User
@@ -35,7 +35,9 @@ container
 container.bind<ITokenService>('ITokenService').to(TokenService)
 container.bind<ITokenRepository>('ITokenRepository').to(TokenRepository)
 // Email
-container.bind<IEmailService>('IEmailService').to(EmailService)
+container
+    .bind<INodemailerProvider>('INodemailerProvider')
+    .to(NodemailerProvider)
 // Image upload provider (CLOUDINARY)
 container
     .bind<IImageUploadProvider>('IImageUploadProvider')

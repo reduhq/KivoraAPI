@@ -2,20 +2,18 @@
     <mj-body background-color="#000">
         <mj-section>
             <mj-column>
-                <mj-text color="#fff" align="center">
-                    Kivora
-                </mj-text>
+                <mj-text color="#fff" align="center"> Kivora </mj-text>
                 <mj-divider border-color="#555" border-width="1px"></mj-divider>
                 <mj-text color="#fff" align="center">
-                    Te damos la bienvenida a <span style="font-weight: bold; color: #FF45EC;">Kivora</span>, @{{username}}
+                    Te damos la bienvenida a
+                    <span style="font-weight: bold; color: #ff45ec">Kivora</span
+                    >, @{{username}}
                 </mj-text>
             </mj-column>
         </mj-section>
         <mj-section>
             <mj-column>
-                <mj-button background-color="#ff45ec"
-                    href="{{link}}/login"
-                >
+                <mj-button background-color="#ff45ec" href="{{link}}/login">
                     Inicia ahora
                 </mj-button>
             </mj-column>
