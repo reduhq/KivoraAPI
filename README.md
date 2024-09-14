@@ -34,3 +34,35 @@ npx prisma migrate dev
 ```bash
 npm run dev
 ```
+
+# How to collaborate: Branch and Commit Standards
+
+## Branches
+- **When it's a feature:**
+  - `feature/<feature-name>`
+  - Examples:
+    * `feature/crud-product`
+    * `feature/crud-client`
+
+- **When it's a bug:**
+  - `fix/<bug-name>`
+  - Examples:
+    * `fix/login-issue`
+    * `fix/data-validation`
+
+- **When it's an emergency bug (only towards the `main` branch):**
+  - `hotfix/<emergency-name>`
+  - Examples:
+    * `hotfix/api-crash`
+    * `hotfix/security-vulnerability`
+
+## Commits
+- **When it's a feature:**
+  - `feat: <feature-description>`
+  - Example:
+    * `feat: allow provided config object to extend other configs`
+
+- **When it's a bug:**
+  - `fix: <bug-description>`
+  - Example:
+    * `fix: prevent racing of requests`
