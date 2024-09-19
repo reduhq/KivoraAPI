@@ -8,4 +8,5 @@ export default interface IBusinessRepository
     GetById(_id: number): Promise<Business>
     GetActiveBusiness(): Promise<Array<Business>>
     ActivateBusiness(_id: number): Promise<boolean>
+    GetByBusinessman(_id: number): Promise<Business[]>
 }

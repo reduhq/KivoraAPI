@@ -60,6 +60,62 @@ export default class BusinessController {
 
     /**
      *  @swagger
+     *  /api/v1/business/businessman/{id}:
+     *      get:
+     *          summary: Get all businesses for a businessman
+     *          tags: [Business]
+     *          parameters:
+     *              - in: path
+     *                name: id
+     *                required: true
+     *                schema:
+     *                  type: integer
+     *                description: The ID of the businessman
+     *          responses:
+     *              200:
+     *                  description: List of businesses
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              type: array
+     *                              items:
+     *                                  $ref: '#/components/schemas/BusinessDTO'
+     */
+
+    @httpGet(
+        '/businessman/:id',
+        param('id')
+            .isNumeric()
+            .withMessage('The id must be a number')
+            .exists()
+            .withMessage('The id is required')
+            .notEmpty()
+            .withMessage('The id cannot be empty'),
+        ValidationMiddleware.validate()
+    )
+    public async GetByBusinessman(
+        _req: Request,
+        res: Response
+    ): Promise<Response> {
+        const id: number = Number(_req.params.id)
+        const businesses = await this.businessService.GetByBusinessman(id)
+
+        // Si no se encuentran negocios
+        if (!businesses || businesses.length === 0) {
+            return res
+                .status(404)
+                .json({ message: 'No businesses found for this businessman' })
+        }
+
+        const response = plainToInstance(BusinessDTO, businesses, {
+            excludeExtraneousValues: true
+        })
+
+        return res.status(200).json(response)
+    }
+
+    /**
+     *  @swagger
      *  /api/v1/business/{id}:
      *      get:
      *          summary: Get a business by ID

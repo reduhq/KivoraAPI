@@ -6,4 +6,5 @@ export default interface IBusinessService
     extends IService<Business, BusinessCreateDTO, BusinessUpdateDTO> {
     GetById(_id: number): Promise<Business | null>
     ActivateBusiness(_id: number): Promise<boolean>
+    GetByBusinessman(_id: number): Promise<Business[]>
 }

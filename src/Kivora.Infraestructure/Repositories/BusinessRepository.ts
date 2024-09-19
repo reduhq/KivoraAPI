@@ -14,6 +14,18 @@ export default class BusinessRepository implements IBusinessRepository {
     constructor() {
         this.context = KivoraContext
     }
+    public async GetByBusinessman(_id: number): Promise<Business[]> {
+        const businesses = await this.context.business.findMany({
+            where: {
+                businessmanId: _id
+            }
+        })
+
+        return plainToInstance(Business, businesses, {
+            excludeExtraneousValues: true
+        })
+    }
+
     public async ActivateBusiness(_id: number): Promise<boolean> {
         const business = await this.context.business.update({
             where: {
@@ -53,11 +65,14 @@ export default class BusinessRepository implements IBusinessRepository {
     }
 
     public async GetById(id: number): Promise<Business> {
+        // Buscar el negocio por ID, aplicando la lógica de la fecha de desactivación
         const business = await this.context.business.findFirst({
             where: {
-                id
+                id,
+                OR: [{ isActive: true }]
             }
         })
+
         return plainToInstance(Business, business, {
             excludeExtraneousValues: true
         })

@@ -14,6 +14,9 @@ export default class BusinessService implements IBusinessService {
     ) {
         this.businessRespository = businessRepository
     }
+    public async GetByBusinessman(_id: number): Promise<Business[]> {
+        return await this.businessRespository.GetByBusinessman(_id)
+    }
     public async ActivateBusiness(_id: number): Promise<boolean> {
         const business = await this.businessRespository.GetById(_id)
         if (!business) return false
