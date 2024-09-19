@@ -53,6 +53,27 @@ model Businessman {
   id Int @unique
 
   user User @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  business Business[]
+}
+
+model Business {
+  id Int  @id @default(autoincrement())
+  businessmanId Int
+  name String
+  picture String?
+  description String 
+  location String
+  adress String
+  whatsapp String?
+  instagram String?
+  x String?
+  facebook String?
+  rate Int?
+  isActive Boolean   @default(true)
+  deactivationDate DateTime? // campo para la fecha de desactivación
+
+  businessman Businessman @relation(fields: [businessmanId], references: [id], onDelete: Cascade)
 }
 
 model Product {

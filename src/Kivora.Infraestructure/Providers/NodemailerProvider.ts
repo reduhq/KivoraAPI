@@ -10,9 +10,9 @@ export default class NodemailerProvider implements INodemailerProvider {
     private transporter
 
     constructor() {
-        if (!settings.EMAILS_ENABLED) {
-            throw new Error('El envio de email no esta habilitado')
-        }
+        // if (!settings.EMAILS_ENABLED) {
+        //     throw new Error('El envio de email no esta habilitado')
+        // }
 
         // Configurar nodemailer (SMTP transporter)
         this.transporter = nodemailer.createTransport({
