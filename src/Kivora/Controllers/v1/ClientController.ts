@@ -7,6 +7,8 @@ import { plainToInstance } from 'class-transformer'
 import ClientDTO from '@Kivora.Domain/DTO/ClientDTO/ClientDTO'
 import ValidationMiddleware from '@Kivora/Middlewares/ValidationMiddleware'
 import ClientCreateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientCreateDTO'
+import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
+import JWT from '@Kivora.Infraestructure/libs/JWT'
 
 @controller(`${settings.API_V1_STR}/client`)
 export default class ClientController {
@@ -17,8 +19,13 @@ export default class ClientController {
      *      description: Clients management
      */
     private readonly clientService: IClientService
-    constructor(@inject('IClientService') clientService: IClientService) {
+    private readonly nodemailerProvider: INodemailerProvider
+    constructor(
+        @inject('IClientService') clientService: IClientService,
+        @inject('INodemailerProvider') nodemailerProvider: INodemailerProvider
+    ) {
         this.clientService = clientService
+        this.nodemailerProvider = nodemailerProvider
     }
 
     /**
@@ -70,6 +77,16 @@ export default class ClientController {
         const clientData: ClientCreateDTO = req.body
         // creating the client
         const client = await this.clientService.Create(clientData)
+        // Create token
+        const token = JWT.GenerateNewAccountToken(client.id)
+        // Sending the confirmation email
+        if (settings.EMAILS_ENABLED && clientData.user.email) {
+            await this.nodemailerProvider.SendNewAccountEmail(
+                clientData.user.email,
+                clientData.user.username,
+                token
+            )
+        }
         // response
         const response = plainToInstance(ClientDTO, client, {
             excludeExtraneousValues: true
