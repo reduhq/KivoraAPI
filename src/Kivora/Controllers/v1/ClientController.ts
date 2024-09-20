@@ -9,6 +9,7 @@ import ValidationMiddleware from '@Kivora/Middlewares/ValidationMiddleware'
 import ClientCreateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientCreateDTO'
 import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
 import JWT from '@Kivora.Infraestructure/libs/JWT'
+import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
 
 @controller(`${settings.API_V1_STR}/client`)
 export default class ClientController {
@@ -19,13 +20,16 @@ export default class ClientController {
      *      description: Clients management
      */
     private readonly clientService: IClientService
+    private readonly userService: IUserService
     private readonly nodemailerProvider: INodemailerProvider
     constructor(
         @inject('IClientService') clientService: IClientService,
+        @inject('IUserService') userService: IUserService,
         @inject('INodemailerProvider') nodemailerProvider: INodemailerProvider
     ) {
         this.clientService = clientService
         this.nodemailerProvider = nodemailerProvider
+        this.userService = userService
     }
 
     /**
@@ -75,6 +79,19 @@ export default class ClientController {
     @httpPost('/', ValidationMiddleware.body(ClientCreateDTO))
     public async Create(req: Request, res: Response): Promise<Response> {
         const clientData: ClientCreateDTO = req.body
+        // validating
+        const userUsername = await this.userService.GetByUsername(
+            clientData.user.username
+        )
+        const userEmail = await this.userService.GetByEmail(
+            clientData.user.email
+        )
+        if (userUsername) {
+            return res.status(400).json('El username ya esta en uso')
+        }
+        if (userEmail) {
+            return res.status(400).json('El email ya esta en uso')
+        }
         // creating the client
         const client = await this.clientService.Create(clientData)
         // Create token
