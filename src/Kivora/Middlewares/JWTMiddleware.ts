@@ -61,7 +61,7 @@ export default class JWTMiddleware {
             const userId = res.locals.userId
             // Getting the full model
             if (getFullModel) {
-                const client = JWTMiddleware.clientService.GetById(userId)
+                const client = await JWTMiddleware.clientService.GetById(userId)
                 if (!client) return res.status(404).json('Usuario invalido')
                 res.locals.clientModel = client
             } else {
