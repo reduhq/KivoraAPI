@@ -10,6 +10,8 @@ import ClientCreateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientCreateDTO'
 import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
 import JWT from '@Kivora.Infraestructure/libs/JWT'
 import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
+import JWTMiddleware from '@Kivora/Middlewares/JWTMiddleware'
+import Client from '@Kivora.Domain/Entities/Client'
 
 @controller(`${settings.API_V1_STR}/client`)
 export default class ClientController {
@@ -51,6 +53,35 @@ export default class ClientController {
         const clients = await this.clientService.GetAll()
         // response
         const response = plainToInstance(ClientDTO, clients, {
+            excludeExtraneousValues: true
+        })
+        return res.status(200).json(response)
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/client/me:
+     *      get:
+     *          summary: Get Current Client
+     *          tags: [Client]
+     *          security:
+     *              - oAuth2Password: []
+     *          responses:
+     *              200:
+     *                  description: Get Current Client
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              $ref: '#/components/schemas/ClientDTO'
+     */
+    @httpGet('/me', JWTMiddleware.GetCurrentClient(true))
+    public async GetCurrentClient(
+        _req: Request,
+        res: Response
+    ): Promise<Response> {
+        const client: Client = res.locals.clientModel
+        // response
+        const response = plainToInstance(ClientDTO, client, {
             excludeExtraneousValues: true
         })
         return res.status(200).json(response)
