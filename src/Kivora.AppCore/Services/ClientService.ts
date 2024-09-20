@@ -1,4 +1,5 @@
 import IClientService from '@Kivora.AppCore/Interfaces/IClientService'
+import Security from '@Kivora.AppCore/utils/Security'
 import ClientCreateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientCreateDTO'
 import ClientUpdateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientUpdateDTO'
 import Client from '@Kivora.Domain/Entities/Client'
@@ -15,6 +16,7 @@ export default class ClientService implements IClientService {
     }
 
     public async Create(t: ClientCreateDTO): Promise<Client> {
+        t.user.password = await Security.HashPassword(t.user.password)
         return await this.clientRepository.Create(t)
     }
     Update(_id: number, _t: ClientUpdateDTO): Promise<Client | null> {
