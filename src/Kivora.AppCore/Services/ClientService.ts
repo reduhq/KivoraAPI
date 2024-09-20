@@ -14,8 +14,8 @@ export default class ClientService implements IClientService {
         this.clientRepository = clientRepository
     }
 
-    Create(_t: ClientCreateDTO): Promise<Client> {
-        throw new Error('Method not implemented.')
+    public async Create(t: ClientCreateDTO): Promise<Client> {
+        return await this.clientRepository.Create(t)
     }
     Update(_id: number, _t: ClientUpdateDTO): Promise<Client | null> {
         throw new Error('Method not implemented.')
