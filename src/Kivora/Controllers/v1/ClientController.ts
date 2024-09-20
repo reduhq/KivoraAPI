@@ -36,30 +36,6 @@ export default class ClientController {
 
     /**
      *  @swagger
-     *  /api/v1/client:
-     *      get:
-     *          summary: Get all clients
-     *          tags: [Client]
-     *          responses:
-     *              200:
-     *                  description: All clients
-     *                  content:
-     *                      application/json:
-     *                          schema:
-     *                              $ref: '#/components/schemas/ClientDTO'
-     */
-    @httpGet('/')
-    public async GetAll(_req: Request, res: Response): Promise<Response> {
-        const clients = await this.clientService.GetAll()
-        // response
-        const response = plainToInstance(ClientDTO, clients, {
-            excludeExtraneousValues: true
-        })
-        return res.status(200).json(response)
-    }
-
-    /**
-     *  @swagger
      *  /api/v1/client/me:
      *      get:
      *          summary: Get Current Client
@@ -82,6 +58,30 @@ export default class ClientController {
         const client: Client = res.locals.clientModel
         // response
         const response = plainToInstance(ClientDTO, client, {
+            excludeExtraneousValues: true
+        })
+        return res.status(200).json(response)
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/client:
+     *      get:
+     *          summary: Get all clients
+     *          tags: [Client]
+     *          responses:
+     *              200:
+     *                  description: All clients
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              $ref: '#/components/schemas/ClientDTO'
+     */
+    @httpGet('/')
+    public async GetAll(_req: Request, res: Response): Promise<Response> {
+        const clients = await this.clientService.GetAll()
+        // response
+        const response = plainToInstance(ClientDTO, clients, {
             excludeExtraneousValues: true
         })
         return res.status(200).json(response)
