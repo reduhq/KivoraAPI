@@ -23,7 +23,7 @@ export default class ClientService implements IClientService {
     Delete(_id: number): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
-    GetAll(): Promise<Client[]> {
-        throw new Error('Method not implemented.')
+    public async GetAll(): Promise<Client[]> {
+        return await this.clientRepository.GetAll()
     }
 }

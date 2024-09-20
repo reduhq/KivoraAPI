@@ -3,6 +3,8 @@ import settings from '@Kivora.Infraestructure/Settings'
 import { inject } from 'inversify'
 import { controller, httpGet } from 'inversify-express-utils'
 import { Request, Response } from 'express'
+import { plainToInstance } from 'class-transformer'
+import ClientDTO from '@Kivora.Domain/DTO/ClientDTO/ClientDTO'
 
 @controller(`${settings.API_V1_STR}/client`)
 export default class ClientController {
@@ -12,7 +14,12 @@ export default class ClientController {
     }
 
     @httpGet('/')
-    public GetAll(_req: Request, res: Response) {
-        return res.status(200).json('siuuuuu')
+    public async GetAll(_req: Request, res: Response): Promise<Response> {
+        const clients = await this.clientService.GetAll()
+        // response
+        const response = plainToInstance(ClientDTO, clients, {
+            excludeExtraneousValues: true
+        })
+        return res.status(200).json(response)
     }
 }

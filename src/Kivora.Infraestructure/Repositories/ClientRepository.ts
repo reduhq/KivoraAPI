@@ -4,6 +4,7 @@ import Client from '@Kivora.Domain/Entities/Client'
 import IClientRepository from '@Kivora.Domain/Interfaces/IClientRepository'
 import { KivoraContext } from '@Kivora.Domain/KivoraContext'
 import { PrismaClient } from '@prisma/client'
+import { plainToInstance } from 'class-transformer'
 import { injectable } from 'inversify'
 
 @injectable()
@@ -22,7 +23,10 @@ export default class ClientRepository implements IClientRepository {
     Delete(_id: number): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
-    GetAll(): Promise<Client[]> {
-        throw new Error('Method not implemented.')
+    public async GetAll(): Promise<Client[]> {
+        const clients = await this.context.client.findMany()
+        return plainToInstance(Client, clients, {
+            excludeExtraneousValues: true
+        })
     }
 }
