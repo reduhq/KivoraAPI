@@ -26,6 +26,10 @@ export default class ClientRepository implements IClientRepository {
         const client = await this.context.client.create({
             data: {
                 id: user.id
+            },
+            select: {
+                id: true,
+                user: true
             }
         })
         return plainToInstance(Client, client, {
@@ -39,7 +43,12 @@ export default class ClientRepository implements IClientRepository {
         throw new Error('Method not implemented.')
     }
     public async GetAll(): Promise<Client[]> {
-        const clients = await this.context.client.findMany()
+        const clients = await this.context.client.findMany({
+            select: {
+                id: true,
+                user: true
+            }
+        })
         return plainToInstance(Client, clients, {
             excludeExtraneousValues: true
         })
