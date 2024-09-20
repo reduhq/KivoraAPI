@@ -1,4 +1,5 @@
 import IBusinessmanService from '@Kivora.AppCore/Interfaces/IBusinessmanService'
+import IClientService from '@Kivora.AppCore/Interfaces/IClientService'
 import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
 import { ROLE } from '@Kivora.Domain/Enums/ROLE'
 import settings from '@Kivora.Infraestructure/Settings'
@@ -11,6 +12,8 @@ export default class JWTMiddleware {
         'IBusinessmanService'
     )
     private static userService: IUserService = container.get('IUserService')
+    private static clientService: IClientService =
+        container.get('IClientService')
 
     private static VerifyJWT(req: Request, res: Response) {
         const token = req.headers.authorization
@@ -42,6 +45,29 @@ export default class JWTMiddleware {
                 const user = await JWTMiddleware.userService.GetById(userId)
                 if (!user) return res.status(404).json('Usuario no encontrado')
                 if (user.role !== ROLE.BUSINESSMAN)
+                    return res.status(403).json('Usuario no autorizado')
+                res.locals.userModel = user
+            }
+            return next()
+        }
+    }
+
+    public static GetCurrentClient(getFullModel: boolean = false) {
+        return async (req: Request, res: Response, next: NextFunction) => {
+            // Verifying the JWT
+            const result = JWTMiddleware.VerifyJWT(req, res)
+            if (result) return result
+            //
+            const userId = res.locals.userId
+            // Getting the full model
+            if (getFullModel) {
+                const client = JWTMiddleware.clientService.GetById(userId)
+                if (!client) return res.status(404).json('Usuario invalido')
+                res.locals.clientModel = client
+            } else {
+                const user = await JWTMiddleware.userService.GetById(userId)
+                if (!user) return res.status(404).json('Usuaario no encontrado')
+                if (user.role !== ROLE.CLIENT)
                     return res.status(403).json('Usuario no autorizado')
                 res.locals.userModel = user
             }
