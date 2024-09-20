@@ -19,6 +19,22 @@ export default class ClientRepository implements IClientRepository {
         this.userRepository = userRepository
     }
 
+    public async GetById(id: number): Promise<Client | null> {
+        const client = await this.context.client.findFirst({
+            where: {
+                id
+            },
+            select: {
+                id: true,
+                user: true
+            }
+        })
+        if (!client) return null
+        return plainToInstance(Client, client, {
+            excludeExtraneousValues: true
+        })
+    }
+
     public async Create(t: ClientCreateDTO): Promise<Client> {
         // Creating a new user
         const user: User = await this.userRepository.Create(t.user, ROLE.CLIENT)

@@ -4,4 +4,6 @@ import ClientCreateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientCreateDTO'
 import ClientUpdateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientUpdateDTO'
 
 export default interface IClientRepository
-    extends IRepository<Client, ClientCreateDTO, ClientUpdateDTO> {}
+    extends IRepository<Client, ClientCreateDTO, ClientUpdateDTO> {
+    GetById(id: number): Promise<Client | null>
+}

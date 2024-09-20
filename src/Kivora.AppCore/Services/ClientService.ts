@@ -15,6 +15,10 @@ export default class ClientService implements IClientService {
         this.clientRepository = clientRepository
     }
 
+    public async GetById(id: number): Promise<Client | null> {
+        return await this.clientRepository.GetById(id)
+    }
+
     public async Create(t: ClientCreateDTO): Promise<Client> {
         t.user.password = await Security.HashPassword(t.user.password)
         return await this.clientRepository.Create(t)
