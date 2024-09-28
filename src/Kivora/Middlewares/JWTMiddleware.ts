@@ -52,7 +52,7 @@ export default class JWTMiddleware {
         }
     }
 
-    public static GetCurrentClient(getFullModel: boolean = false) {
+    public static GetCurrentCustomer(getFullModel: boolean = false) {
         return async (req: Request, res: Response, next: NextFunction) => {
             // Verifying the JWT
             const result = JWTMiddleware.VerifyJWT(req, res)
@@ -63,7 +63,7 @@ export default class JWTMiddleware {
             if (getFullModel) {
                 const client = await JWTMiddleware.clientService.GetById(userId)
                 if (!client) return res.status(404).json('Usuario invalido')
-                res.locals.clientModel = client
+                res.locals.customerModel = client
             } else {
                 const user = await JWTMiddleware.userService.GetById(userId)
                 if (!user) return res.status(404).json('Usuaario no encontrado')

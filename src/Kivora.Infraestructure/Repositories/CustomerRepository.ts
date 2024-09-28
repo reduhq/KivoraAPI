@@ -52,8 +52,22 @@ export default class CustomerRepository implements IClientRepository {
             excludeExtraneousValues: true
         })
     }
-    Update(_id: number, _t: CustomerUpdateDTO): Promise<Customer> {
-        throw new Error('Method not implemented.')
+    public async Update(id: number, t: CustomerUpdateDTO): Promise<Customer> {
+        const customer = await this.context.customer.update({
+            select: {
+                id: true,
+                user: true
+            },
+            data: {
+                user: {
+                    update: t.user
+                }
+            },
+            where: { id }
+        })
+        return plainToInstance(Customer, customer, {
+            excludeExtraneousValues: true
+        })
     }
     Delete(_id: number): Promise<boolean> {
         throw new Error('Method not implemented.')
