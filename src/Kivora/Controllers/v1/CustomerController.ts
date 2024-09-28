@@ -72,30 +72,6 @@ export default class CustomerController {
     /**
      *  @swagger
      *  /api/v1/customer:
-     *      get:
-     *          summary: Get all customer
-     *          tags: [Customer]
-     *          responses:
-     *              200:
-     *                  description: All customers
-     *                  content:
-     *                      application/json:
-     *                          schema:
-     *                              $ref: '#/components/schemas/CustomerDTO'
-     */
-    @httpGet('/')
-    public async GetAll(_req: Request, res: Response): Promise<Response> {
-        const customers = await this.customerService.GetAll()
-        // response
-        const response = plainToInstance(CustomerDTO, customers, {
-            excludeExtraneousValues: true
-        })
-        return res.status(200).json(response)
-    }
-
-    /**
-     *  @swagger
-     *  /api/v1/customer:
      *      post:
      *          summary: Create a new customer
      *          tags: [Customer]
