@@ -1,5 +1,5 @@
 import IBusinessmanService from '@Kivora.AppCore/Interfaces/IBusinessmanService'
-import IClientService from '@Kivora.AppCore/Interfaces/IClientService'
+import ICustomerService from '@Kivora.AppCore/Interfaces/ICustomerService'
 import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
 import { ROLE } from '@Kivora.Domain/Enums/ROLE'
 import settings from '@Kivora.Infraestructure/Settings'
@@ -12,8 +12,8 @@ export default class JWTMiddleware {
         'IBusinessmanService'
     )
     private static userService: IUserService = container.get('IUserService')
-    private static clientService: IClientService =
-        container.get('IClientService')
+    private static clientService: ICustomerService =
+        container.get('ICustomerService')
 
     private static VerifyJWT(req: Request, res: Response) {
         const token = req.headers.authorization

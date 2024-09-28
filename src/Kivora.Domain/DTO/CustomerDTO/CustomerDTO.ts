@@ -5,7 +5,7 @@ import UserDTO from '../UserDTO/UserDTO'
  *  @swagger
  *  components:
  *      schemas:
- *          ClientDTO:
+ *          CustomerDTO:
  *              type: object
  *              properties:
  *                  id:
@@ -14,7 +14,7 @@ import UserDTO from '../UserDTO/UserDTO'
  *                  user:
  *                      $ref: '#/components/schemas/UserDTO'
  */
-export default class ClientDTO {
+export default class CustomerDTO {
     @Expose()
     id!: number
 

@@ -1,31 +1,31 @@
-import IClientService from '@Kivora.AppCore/Interfaces/IClientService'
+import ICustomerService from '@Kivora.AppCore/Interfaces/ICustomerService'
 import settings from '@Kivora.Infraestructure/Settings'
 import { inject } from 'inversify'
 import { controller, httpGet, httpPost } from 'inversify-express-utils'
 import { Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
-import ClientDTO from '@Kivora.Domain/DTO/ClientDTO/ClientDTO'
+import CustomerDTO from '@Kivora.Domain/DTO/CustomerDTO/CustomerDTO'
 import ValidationMiddleware from '@Kivora/Middlewares/ValidationMiddleware'
-import ClientCreateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientCreateDTO'
+import CustomerCreateDTO from '@Kivora.Domain/DTO/CustomerDTO/CustomerCreateDTO'
 import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
 import JWT from '@Kivora.Infraestructure/libs/JWT'
 import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
 import JWTMiddleware from '@Kivora/Middlewares/JWTMiddleware'
-import Client from '@Kivora.Domain/Entities/Client'
+import Customer from '@Kivora.Domain/Entities/Customer'
 
-@controller(`${settings.API_V1_STR}/client`)
-export default class ClientController {
+@controller(`${settings.API_V1_STR}/customer`)
+export default class CustomerController {
     /**
      *  @swagger
      *  tags:
-     *      name: Client
+     *      name: Customer
      *      description: Clients management
      */
-    private readonly clientService: IClientService
+    private readonly clientService: ICustomerService
     private readonly userService: IUserService
     private readonly nodemailerProvider: INodemailerProvider
     constructor(
-        @inject('IClientService') clientService: IClientService,
+        @inject('ICustomerService') clientService: ICustomerService,
         @inject('IUserService') userService: IUserService,
         @inject('INodemailerProvider') nodemailerProvider: INodemailerProvider
     ) {
@@ -36,28 +36,28 @@ export default class ClientController {
 
     /**
      *  @swagger
-     *  /api/v1/client/me:
+     *  /api/v1/customer/me:
      *      get:
-     *          summary: Get Current Client
-     *          tags: [Client]
+     *          summary: Get Current customer
+     *          tags: [Customer]
      *          security:
      *              - oAuth2Password: []
      *          responses:
      *              200:
-     *                  description: Get Current Client
+     *                  description: Get Current customer
      *                  content:
      *                      application/json:
      *                          schema:
-     *                              $ref: '#/components/schemas/ClientDTO'
+     *                              $ref: '#/components/schemas/CustomerDTO'
      */
     @httpGet('/me', JWTMiddleware.GetCurrentClient(true))
     public async GetCurrentClient(
         _req: Request,
         res: Response
     ): Promise<Response> {
-        const client: Client = res.locals.clientModel
+        const client: Customer = res.locals.clientModel
         // response
-        const response = plainToInstance(ClientDTO, client, {
+        const response = plainToInstance(CustomerDTO, client, {
             excludeExtraneousValues: true
         })
         return res.status(200).json(response)
@@ -65,23 +65,23 @@ export default class ClientController {
 
     /**
      *  @swagger
-     *  /api/v1/client:
+     *  /api/v1/customer:
      *      get:
-     *          summary: Get all clients
-     *          tags: [Client]
+     *          summary: Get all customer
+     *          tags: [Customer]
      *          responses:
      *              200:
-     *                  description: All clients
+     *                  description: All customers
      *                  content:
      *                      application/json:
      *                          schema:
-     *                              $ref: '#/components/schemas/ClientDTO'
+     *                              $ref: '#/components/schemas/CustomerDTO'
      */
     @httpGet('/')
     public async GetAll(_req: Request, res: Response): Promise<Response> {
         const clients = await this.clientService.GetAll()
         // response
-        const response = plainToInstance(ClientDTO, clients, {
+        const response = plainToInstance(CustomerDTO, clients, {
             excludeExtraneousValues: true
         })
         return res.status(200).json(response)
@@ -89,27 +89,27 @@ export default class ClientController {
 
     /**
      *  @swagger
-     *  /api/v1/client:
+     *  /api/v1/customer:
      *      post:
-     *          summary: Create a new client
-     *          tags: [Client]
+     *          summary: Create a new customer
+     *          tags: [Customer]
      *          requestBody:
      *              required: true
      *              content:
      *                  application/json:
      *                      schema:
-     *                          $ref: '#/components/schemas/ClientCreateDTO'
+     *                          $ref: '#/components/schemas/CustomerCreateDTO'
      *          responses:
      *              200:
-     *                  description: Client created successfully
+     *                  description: Customer created successfully
      *                  content:
      *                      application/json:
      *                          schema:
-     *                              $ref: '#/components/schemas/ClientDTO'
+     *                              $ref: '#/components/schemas/CustomerDTO'
      */
-    @httpPost('/', ValidationMiddleware.body(ClientCreateDTO))
+    @httpPost('/', ValidationMiddleware.body(CustomerCreateDTO))
     public async Create(req: Request, res: Response): Promise<Response> {
-        const clientData: ClientCreateDTO = req.body
+        const clientData: CustomerCreateDTO = req.body
         // validating
         const userUsername = await this.userService.GetByUsername(
             clientData.user.username
@@ -136,7 +136,7 @@ export default class ClientController {
             )
         }
         // response
-        const response = plainToInstance(ClientDTO, client, {
+        const response = plainToInstance(CustomerDTO, client, {
             excludeExtraneousValues: true
         })
         return res.status(200).json(response)

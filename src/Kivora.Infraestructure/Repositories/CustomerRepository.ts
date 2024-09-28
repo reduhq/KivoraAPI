@@ -1,7 +1,7 @@
-import ClientCreateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientCreateDTO'
-import ClientUpdateDTO from '@Kivora.Domain/DTO/ClientDTO/ClientUpdateDTO'
-import Client from '@Kivora.Domain/Entities/Client'
-import IClientRepository from '@Kivora.Domain/Interfaces/IClientRepository'
+import CustomerCreateDTO from '@Kivora.Domain/DTO/CustomerDTO/CustomerCreateDTO'
+import CustomerUpdateDTO from '@Kivora.Domain/DTO/CustomerDTO/CustomerUpdateDTO'
+import Customer from '@Kivora.Domain/Entities/Customer'
+import IClientRepository from '@Kivora.Domain/Interfaces/ICustomerRepository'
 import { KivoraContext } from '@Kivora.Domain/KivoraContext'
 import { PrismaClient } from '@prisma/client'
 import { plainToInstance } from 'class-transformer'
@@ -11,7 +11,7 @@ import User from '@Kivora.Domain/Entities/User'
 import IUserRepository from '@Kivora.Domain/Interfaces/IUserRepository'
 
 @injectable()
-export default class ClientRepository implements IClientRepository {
+export default class CustomerRepository implements IClientRepository {
     private readonly context: PrismaClient
     private readonly userRepository: IUserRepository
     constructor(@inject('IUserRepository') userRepository: IUserRepository) {
@@ -19,8 +19,8 @@ export default class ClientRepository implements IClientRepository {
         this.userRepository = userRepository
     }
 
-    public async GetById(id: number): Promise<Client | null> {
-        const client = await this.context.client.findFirst({
+    public async GetById(id: number): Promise<Customer | null> {
+        const customer = await this.context.customer.findFirst({
             where: {
                 id
             },
@@ -29,17 +29,17 @@ export default class ClientRepository implements IClientRepository {
                 user: true
             }
         })
-        if (!client) return null
-        return plainToInstance(Client, client, {
+        if (!customer) return null
+        return plainToInstance(Customer, customer, {
             excludeExtraneousValues: true
         })
     }
 
-    public async Create(t: ClientCreateDTO): Promise<Client> {
+    public async Create(t: CustomerCreateDTO): Promise<Customer> {
         // Creating a new user
         const user: User = await this.userRepository.Create(t.user, ROLE.CLIENT)
-        // Creating a new client
-        const client = await this.context.client.create({
+        // Creating a new customer
+        const customer = await this.context.customer.create({
             data: {
                 id: user.id
             },
@@ -48,24 +48,24 @@ export default class ClientRepository implements IClientRepository {
                 user: true
             }
         })
-        return plainToInstance(Client, client, {
+        return plainToInstance(Customer, customer, {
             excludeExtraneousValues: true
         })
     }
-    Update(_id: number, _t: ClientUpdateDTO): Promise<Client> {
+    Update(_id: number, _t: CustomerUpdateDTO): Promise<Customer> {
         throw new Error('Method not implemented.')
     }
     Delete(_id: number): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
-    public async GetAll(): Promise<Client[]> {
-        const clients = await this.context.client.findMany({
+    public async GetAll(): Promise<Customer[]> {
+        const clients = await this.context.customer.findMany({
             select: {
                 id: true,
                 user: true
             }
         })
-        return plainToInstance(Client, clients, {
+        return plainToInstance(Customer, clients, {
             excludeExtraneousValues: true
         })
     }

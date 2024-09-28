@@ -6,13 +6,13 @@ import UserUpdateDTO from '../UserDTO/UserUpdateDTO'
  *  @swagger
  *  components:
  *      schemas:
- *          ClientUpdateDTO:
+ *          CustomerUpdateDTO:
  *              type: object
  *              properties:
  *                  user:
  *                      $ref: '#/components/schemas/UserUpdateDTO'
  */
-export default class ClientUpdateDTO {
+export default class CustomerUpdateDTO {
     @Expose()
     @ValidateNested()
     @Type(() => UserUpdateDTO)

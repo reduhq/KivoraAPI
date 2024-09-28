@@ -6,13 +6,13 @@ import { IsNotEmpty, ValidateNested } from 'class-validator'
  *  @swagger
  *  components:
  *      schemas:
- *          ClientCreateDTO:
+ *          CustomerCreateDTO:
  *              type: object
  *              properties:
  *                  user:
  *                      $ref: '#/components/schemas/UserCreateDTO'
  */
-export default class ClientCreateDTO {
+export default class CustomerCreateDTO {
     @Expose()
     @ValidateNested()
     @Type(() => UserCreateDTO)
