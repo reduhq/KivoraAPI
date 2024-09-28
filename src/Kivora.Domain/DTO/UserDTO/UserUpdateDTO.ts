@@ -12,10 +12,6 @@ import { IsOptional, IsString } from 'class-validator'
  *            type: string
  *            description: Nombre completo del usuario
  *            example: John Doe
- *          profilePicture:
- *            type: string
- *            description: URL de la imagen de perfil del usuario
- *            example: http://example.com/profile.jpg
  *          phone:
  *            type: string
  *            description: Número de teléfono del usuario
@@ -26,11 +22,6 @@ export default class UserUpdateDTO {
     @IsOptional()
     @IsString()
     name?: string
-
-    @Expose()
-    @IsOptional()
-    @IsString()
-    profilePicture?: string
 
     @Expose()
     @IsOptional()

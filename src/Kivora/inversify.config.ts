@@ -19,6 +19,10 @@ import IProductRepository from '@Kivora.Domain/Interfaces/IProductRepository'
 import ProductRepository from '@Kivora.Infraestructure/Repositories/ProductRepository'
 import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
 import NodemailerProvider from '@Kivora.Infraestructure/Providers/NodemailerProvider'
+import ICustomerRepository from '@Kivora.Domain/Interfaces/ICustomerRepository'
+import CustomerRepository from '@Kivora.Infraestructure/Repositories/CustomerRepository'
+import ICustomerService from '@Kivora.AppCore/Interfaces/ICustomerService'
+import CustomerService from '@Kivora.AppCore/Services/CustomerService'
 
 const container = new Container()
 // User
@@ -45,5 +49,10 @@ container
 // Product
 container.bind<IProductService>('IProductService').to(ProductService)
 container.bind<IProductRepository>('IProductRepository').to(ProductRepository)
+// Customer
+container
+    .bind<ICustomerRepository>('ICustomerRepository')
+    .to(CustomerRepository)
+container.bind<ICustomerService>('ICustomerService').to(CustomerService)
 
 export { container }
