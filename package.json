@@ -5,6 +5,8 @@
     "main": "index.js",
     "scripts": {
         "dev": "ts-node-dev -r tsconfig-paths/register src/Kivora/index.ts",
+        "build": "tsc",
+        "start": "node -r tsconfig-paths/register build/Kivora/index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "prettier": "prettier --write ."
     },
