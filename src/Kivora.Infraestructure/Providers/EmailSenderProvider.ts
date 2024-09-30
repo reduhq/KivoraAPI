@@ -1,0 +1,72 @@
+import nodemailer from 'nodemailer'
+import nunjucks from 'nunjucks'
+import path from 'path'
+import IEmailSenderProvider from '@Kivora.Domain/Interfaces/Providers/IEmailSenderProvider'
+import settings from '@Kivora.Infraestructure/Settings'
+import { injectable } from 'inversify'
+
+@injectable()
+export default class EmailSenderProvider implements IEmailSenderProvider {
+    private async SendMail(
+        emailTo: string,
+        subjectTemplate: string = '',
+        htmlTemplate: string = '',
+        environment: { [value: string]: string } = {}
+    ) {
+        if (!settings.EMAILS_ENABLED) {
+            throw new Error('El envio de email no esta habillitado')
+        }
+        // Configuring nodemailer (SMTP transporter)
+        const transporter = nodemailer.createTransport({
+            host: settings.SMTP_HOST,
+            port: settings.SMTP_PORT,
+            // secure: settings.SMTP_TLS,
+            auth: {
+                user: settings.SMTP_USER,
+                pass: settings.SMTP_PASSWORD
+            }
+        })
+        // Render HTML
+        nunjucks.configure(
+            path.resolve(__dirname, '../EmailTemplates/buildHTML'),
+            { autoescape: true }
+        )
+        const html = nunjucks.render(htmlTemplate, environment)
+        // Creating the message
+        const message = {
+            from: `"${settings.EMAILS_FROM_NAME}" <${settings.EMAILS_FROM_EMAIL}>`,
+            to: emailTo,
+            subject: subjectTemplate,
+            html: html
+        }
+        // Sending the email
+        await transporter.sendMail(message)
+    }
+
+    public async SendNewAccountEmail(
+        emailTo: string,
+        username: string,
+        token: string
+    ) {
+        const subjectTemplate = `${settings.PROJECT_NAME} - Nueva cuenta creada para @${username}`
+        const htmlTemplate = 'NewAccount.html'
+        const link = `${settings.FRONTEND_HOST}/verified-account?token=${token}`
+        await this.SendMail(emailTo, subjectTemplate, htmlTemplate, {
+            link: link,
+            valid_minutes: (
+                settings.EMAIL_RESET_TOKEN_EXPIRE_MINUTES / 60
+            ).toString(),
+            username: username
+        })
+    }
+
+    public async SendWelcomeEmail(emailTo: string, username: string) {
+        const subjectTemplate = `Te damos la bienvenida a ${settings.PROJECT_NAME}`
+        const htmlTemplate = 'Welcome.html'
+        const link = settings.FRONTEND_HOST
+        await this.SendMail(emailTo, subjectTemplate, htmlTemplate, {
+            link: link,
+            username: username
+        })
+    }
+}
