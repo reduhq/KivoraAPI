@@ -6,8 +6,8 @@ import settings from '../../../Kivora.Infraestructure/Settings'
 import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import JWT from '../../../Kivora.Infraestructure/libs/JWT'
 import AuthDTO from '../../../Kivora.Domain/DTO/UserDTO/AuthDTO'
-import ITokenService from '@Kivora.AppCore/Interfaces/ITokenService'
-import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
+// import ITokenService from '@Kivora.AppCore/Interfaces/ITokenService'
+// import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
 
 @controller(`${settings.API_V1_STR}`)
 export default class LoginController {
@@ -18,17 +18,17 @@ export default class LoginController {
      *      description: Autenticación de usuarios
      */
     private userService: IUserService
-    private tokenService: ITokenService
-    private nodeMailerProvider: INodemailerProvider
+    // private tokenService: ITokenService
+    // private nodeMailerProvider: INodemailerProvider
 
     constructor(
-        @inject('IUserService') userService: IUserService,
-        @inject('ITokenService') tokenService: ITokenService,
-        @inject('INodemailerProvider') nodeMailerProvider: INodemailerProvider
+        @inject('IUserService') userService: IUserService
+        // @inject('ITokenService') tokenService: ITokenService,
+        // @inject('INodemailerProvider') nodeMailerProvider: INodemailerProvider
     ) {
         this.userService = userService
-        this.tokenService = tokenService
-        this.nodeMailerProvider = nodeMailerProvider
+        // this.tokenService = tokenService
+        // this.nodeMailerProvider = nodeMailerProvider
     }
     /**
      *  @swagger
@@ -84,19 +84,7 @@ export default class LoginController {
         }
 
         if (!usernameExist.confirmed) {
-            const token = await this.tokenService.GenerateToken(
-                usernameExist.id
-            )
-            // Confirmation Email
-            await this.nodeMailerProvider.sendConfirmationEmail({
-                email: usernameExist.email,
-                name: usernameExist.username,
-                token: token.token
-            })
-            const error = new Error(
-                'La cuenta no ha sido confirmada, hemos enviado un e-mail de confirmación'
-            )
-            return res.status(401).json({ error: error.message })
+            return res.status(401).json('Tu cuenta aún no ha sido confirmada')
         }
 
         const user = await this.userService.Authenticate(username, password)
