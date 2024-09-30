@@ -9,7 +9,7 @@ import settings from '../../../Kivora.Infraestructure/Settings'
 import { query } from 'express-validator'
 import JWT from '@Kivora.Infraestructure/libs/JWT'
 import User from '@Kivora.Domain/Entities/User'
-import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
+import IEmailSenderProvider from '@Kivora.Domain/Interfaces/Providers/IEmailSenderProvider'
 
 @controller(`${settings.API_V1_STR}/user`)
 export default class UserController {
@@ -20,15 +20,16 @@ export default class UserController {
      *      description: Gestión de usuarios
      */
     private userService: IUserService
-    private nodeMailerProvider: INodemailerProvider
+    private emailSenderProvider: IEmailSenderProvider
     // private tokenService: ITokenService
 
     constructor(
         @inject('IUserService') userService: IUserService,
-        @inject('INodemailerProvider') nodeMailerProvider: INodemailerProvider
+        @inject('IEmailSenderProvider')
+        emailSenderProvider: IEmailSenderProvider
     ) {
         this.userService = userService
-        this.nodeMailerProvider = nodeMailerProvider
+        this.emailSenderProvider = emailSenderProvider
     }
 
     /**
@@ -115,7 +116,7 @@ export default class UserController {
         // Activating the user account
         const activatedUser: User = await this.userService.ActivateUser(userId)
         // Sending a welcome email
-        await this.nodeMailerProvider.SendWelcomeEmail(
+        await this.emailSenderProvider.SendWelcomeEmail(
             activatedUser.email,
             activatedUser.username
         )

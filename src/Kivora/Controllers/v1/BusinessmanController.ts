@@ -16,11 +16,11 @@ import BusinessmanDTO from '@Kivora.Domain/DTO/BusinessmanDTO/BusinessmanDTO'
 import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
 import IBusinessmanService from '@Kivora.AppCore/Interfaces/IBusinessmanService'
 import JWT from '@Kivora.Infraestructure/libs/JWT'
-import Nodemailer from '@Kivora.Infraestructure/libs/Nodemailer'
 import BusinessmanUpdateDTO from '@Kivora.Domain/DTO/BusinessmanDTO/BusinessmanUpdateDTO'
 import JWTMiddleware from '@Kivora/Middlewares/JWTMiddleware'
 import IImageUploadProvider from '@Kivora.Domain/Interfaces/Providers/IImageUploadProvider'
 import MulterMiddleware from '@Kivora/Middlewares/MulterMiddleware'
+import IEmailSenderProvider from '@Kivora.Domain/Interfaces/Providers/IEmailSenderProvider'
 
 @controller(`${settings.API_V1_STR}/businessman`)
 export default class BusinessmanController {
@@ -32,6 +32,7 @@ export default class BusinessmanController {
      */
     private businessmanService: IBusinessmanService
     private userService: IUserService
+    private emailSenderProvider: IEmailSenderProvider
     private imageUploadProvider: IImageUploadProvider
 
     constructor(
@@ -39,11 +40,14 @@ export default class BusinessmanController {
         businessmanService: IBusinessmanRepository,
         @inject('IUserService')
         userService: IUserService,
+        @inject('IEmailSenderProvider')
+        emailSenderProvider: IEmailSenderProvider,
         @inject('IImageUploadProvider')
         imageUploadProvider: IImageUploadProvider
     ) {
         this.businessmanService = businessmanService
         this.userService = userService
+        this.emailSenderProvider = emailSenderProvider
         this.imageUploadProvider = imageUploadProvider
     }
 
@@ -128,7 +132,7 @@ export default class BusinessmanController {
         const token = JWT.GenerateNewAccountToken(newBusinessman.id)
         // Sending an email to verify if the user is real and activate the account
         if (settings.EMAILS_ENABLED && businessman.user.email) {
-            await Nodemailer.SendNewAccountEmail(
+            await this.emailSenderProvider.SendNewAccountEmail(
                 businessman.user.email,
                 businessman.user.username,
                 token
