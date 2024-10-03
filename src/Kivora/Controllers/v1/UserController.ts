@@ -3,16 +3,13 @@ import { controller, httpGet, httpPost } from 'inversify-express-utils'
 import { inject } from 'inversify'
 import IUserService from '../../../Kivora.AppCore/Interfaces/IUserService'
 import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
-import UserCreateDTO from '../../../Kivora.Domain/DTO/UserDTO/UserCreateDTO'
 import UserDTO from '../../../Kivora.Domain/DTO/UserDTO/UserDTO'
 import { plainToInstance } from 'class-transformer'
 import settings from '../../../Kivora.Infraestructure/Settings'
-import ITokenService from '../../../Kivora.AppCore/Interfaces/ITokenService'
-import { ConfirmAccountDTO } from '../../../Kivora.Domain/DTO/UserDTO/ConfirmAccountDTO'
 import { query } from 'express-validator'
 import JWT from '@Kivora.Infraestructure/libs/JWT'
 import User from '@Kivora.Domain/Entities/User'
-import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
+import IEmailSenderProvider from '@Kivora.Domain/Interfaces/Providers/IEmailSenderProvider'
 
 @controller(`${settings.API_V1_STR}/user`)
 export default class UserController {
@@ -23,17 +20,16 @@ export default class UserController {
      *      description: Gestión de usuarios
      */
     private userService: IUserService
-    private nodeMailerProvider: INodemailerProvider
-    private tokenService: ITokenService
+    private emailSenderProvider: IEmailSenderProvider
+    // private tokenService: ITokenService
 
     constructor(
         @inject('IUserService') userService: IUserService,
-        @inject('INodemailerProvider') nodeMailerProvider: INodemailerProvider,
-        @inject('ITokenService') tokenService: ITokenService
+        @inject('IEmailSenderProvider')
+        emailSenderProvider: IEmailSenderProvider
     ) {
         this.userService = userService
-        this.nodeMailerProvider = nodeMailerProvider
-        this.tokenService = tokenService
+        this.emailSenderProvider = emailSenderProvider
     }
 
     /**
@@ -63,120 +59,6 @@ export default class UserController {
             excludeExtraneousValues: true
         })
         return res.status(200).json(response)
-    }
-
-    /**
-     *  @swagger
-     *  /api/v1/user:
-     *      post:
-     *          summary: Create a new user
-     *          security: []
-     *          tags: [User]
-     *          requestBody:
-     *              required: true
-     *              content:
-     *                  application/json:
-     *                      schema:
-     *                          $ref: '#/components/schemas/UserCreateDTO'
-     *          responses:
-     *              200:
-     *                  description: User created successfully
-     *                  content:
-     *                      application/json:
-     *                          schema:
-     *                              $ref: '#/components/schemas/UserDTO'
-     */
-    @httpPost('/', ValidationMiddleware.body(UserCreateDTO))
-    public async create(
-        req: Request,
-        res: Response
-    ): Promise<Response<UserDTO>> {
-        const user: UserCreateDTO = req.body
-        // Validating if the username and email are available
-        const userDB = await this.userService.GetByUsername(user.username)
-        const emailDB = await this.userService.GetByEmail(user.email)
-
-        if (user.password !== user.passwordConfirmation) {
-            return res.status(400).json('Las contraseñas son diferentes')
-        }
-        if (userDB) {
-            return res.status(409).json('El username ya esta en uso')
-        }
-        if (emailDB) {
-            return res.status(409).json({ message: 'El email ya esta en uso' })
-        }
-
-        // Creating a new User
-        const newUser = await this.userService.Create(user)
-
-        const token = await this.tokenService.GenerateToken(newUser.id)
-
-        // Confirmation Email
-        await this.nodeMailerProvider.sendConfirmationEmail({
-            email: newUser.email,
-            name: newUser.username,
-            token: token.token
-        })
-
-        // Returning the UserDTO
-        const response = plainToInstance(UserDTO, newUser, {
-            excludeExtraneousValues: true
-        })
-        return res.status(200).json(response)
-    }
-
-    /**
-     *  @swagger
-     *  /api/v1/user/confirm-account:
-     *      post:
-     *          summary: Confirm user account
-     *          tags: [User]
-     *          requestBody:
-     *              required: true
-     *              content:
-     *                  application/json:
-     *                      schema:
-     *                          $ref: '#/components/schemas/ConfirmAccountDTO'
-     *          responses:
-     *              200:
-     *                  description: Account confirmed successfully
-     *                  content:
-     *                      application/json:
-     *                          schema:
-     *                              type: object
-     *                              properties:
-     *                                  message:
-     *                                      type: string
-     */
-    @httpPost('/confirm-account', ValidationMiddleware.body(ConfirmAccountDTO))
-    public async confirm_account(
-        req: Request,
-        res: Response
-    ): Promise<Response> {
-        const token: ConfirmAccountDTO = req.body
-
-        // Obtener el token de la base de datos
-        const tokenEntity = await this.tokenService.ValidateToken(token.token)
-        if (!tokenEntity) {
-            return res.status(400).json({ message: 'Token Inválido' })
-        }
-
-        const user = await this.userService.GetUserByToken(token.token)
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' })
-        }
-        // const updateUserDTO = {
-        //     id: user.id,
-        //     confirmed: true
-        // }
-        // await this.userService.Update(updateUserDTO)
-        await this.userService.ActivateUser(user.id)
-
-        await this.tokenService.InvalidateToken(token.token)
-
-        return res
-            .status(200)
-            .json({ message: 'Account confirmed successfully' })
     }
 
     /**
@@ -234,7 +116,7 @@ export default class UserController {
         // Activating the user account
         const activatedUser: User = await this.userService.ActivateUser(userId)
         // Sending a welcome email
-        await this.nodeMailerProvider.SendWelcomeEmail(
+        await this.emailSenderProvider.SendWelcomeEmail(
             activatedUser.email,
             activatedUser.username
         )
