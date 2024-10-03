@@ -12,12 +12,12 @@ import { plainToInstance } from 'class-transformer'
 import CustomerDTO from '@Kivora.Domain/DTO/CustomerDTO/CustomerDTO'
 import ValidationMiddleware from '@Kivora/Middlewares/ValidationMiddleware'
 import CustomerCreateDTO from '@Kivora.Domain/DTO/CustomerDTO/CustomerCreateDTO'
-import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
 import JWT from '@Kivora.Infraestructure/libs/JWT'
 import IUserService from '@Kivora.AppCore/Interfaces/IUserService'
 import JWTMiddleware from '@Kivora/Middlewares/JWTMiddleware'
 import Customer from '@Kivora.Domain/Entities/Customer'
 import CustomerUpdateDTO from '@Kivora.Domain/DTO/CustomerDTO/CustomerUpdateDTO'
+import IEmailSenderProvider from '@Kivora.Domain/Interfaces/Providers/IEmailSenderProvider'
 
 @controller(`${settings.API_V1_STR}/customer`)
 export default class CustomerController {
@@ -29,14 +29,15 @@ export default class CustomerController {
      */
     private readonly customerService: ICustomerService
     private readonly userService: IUserService
-    private readonly nodemailerProvider: INodemailerProvider
+    private readonly emailSenderProvider: IEmailSenderProvider
     constructor(
         @inject('ICustomerService') customerService: ICustomerService,
         @inject('IUserService') userService: IUserService,
-        @inject('INodemailerProvider') nodemailerProvider: INodemailerProvider
+        @inject('IEmailSenderProvider')
+        emailSenderProvider: IEmailSenderProvider
     ) {
         this.customerService = customerService
-        this.nodemailerProvider = nodemailerProvider
+        this.emailSenderProvider = emailSenderProvider
         this.userService = userService
     }
 
@@ -111,7 +112,7 @@ export default class CustomerController {
         const token = JWT.GenerateNewAccountToken(client.id)
         // Sending the confirmation email
         if (settings.EMAILS_ENABLED && clientData.user.email) {
-            await this.nodemailerProvider.SendNewAccountEmail(
+            await this.emailSenderProvider.SendNewAccountEmail(
                 clientData.user.email,
                 clientData.user.username,
                 token

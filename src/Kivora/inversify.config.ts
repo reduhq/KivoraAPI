@@ -23,6 +23,8 @@ import ICustomerRepository from '@Kivora.Domain/Interfaces/ICustomerRepository'
 import CustomerRepository from '@Kivora.Infraestructure/Repositories/CustomerRepository'
 import ICustomerService from '@Kivora.AppCore/Interfaces/ICustomerService'
 import CustomerService from '@Kivora.AppCore/Services/CustomerService'
+import IEmailSenderProvider from '@Kivora.Domain/Interfaces/Providers/IEmailSenderProvider'
+import EmailSenderProvider from '@Kivora.Infraestructure/Providers/EmailSenderProvider'
 
 const container = new Container()
 // User
@@ -38,10 +40,14 @@ container
 // Token
 container.bind<ITokenService>('ITokenService').to(TokenService)
 container.bind<ITokenRepository>('ITokenRepository').to(TokenRepository)
-// Email
+// Email DEPRECATED
 container
     .bind<INodemailerProvider>('INodemailerProvider')
     .to(NodemailerProvider)
+// Email Sender Provider
+container
+    .bind<IEmailSenderProvider>('IEmailSenderProvider')
+    .to(EmailSenderProvider)
 // Image upload provider (CLOUDINARY)
 container
     .bind<IImageUploadProvider>('IImageUploadProvider')
