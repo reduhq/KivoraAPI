@@ -14,9 +14,6 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator'
  *                  password:
  *                      type: string
  *                      example: 12345678
- *                  passwordConfirmation:
- *                      type: string
- *                      example: 12345678
  *                  email:
  *                      type: string
  *                      example: reduhq@gmail.com
@@ -35,14 +32,6 @@ export default class UserCreateDTO {
     @IsNotEmpty({ message: 'La contraseña no puede estar vacia' })
     @MinLength(8, { message: 'La contraseña es muy corta' })
     password: string = ''
-
-    @Expose()
-    @IsString()
-    @IsNotEmpty({
-        message: 'La confirmación de contraseña no puede estar vacía'
-    })
-    @MinLength(8, { message: 'La confirmación de la contraseña es muy corta' })
-    passwordConfirmation: string = ''
 
     @Expose()
     @IsEmail()
