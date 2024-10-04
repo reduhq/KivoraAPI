@@ -32,6 +32,7 @@ model User {
   confirmed      Boolean  @default(false)
 
   businessman Businessman?
+  client      Customer?
 
   token   Token? @relation("UserToken")
   tokenId Int?   @unique
@@ -86,4 +87,10 @@ model Product {
   rate        Int     @default(0)
   isActive    Boolean @default(true)
   tags        String
+}
+
+model Customer {
+  id Int @unique
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
 }

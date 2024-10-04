@@ -25,6 +25,12 @@ import BusinessService from '@Kivora.AppCore/Services/BusinessService'
 import IBusinessService from '@Kivora.AppCore/Interfaces/IBusinessService'
 import IBusinessRepository from '@Kivora.Domain/Interfaces/IBusinessRepository'
 import BusinessRepository from '@Kivora.Infraestructure/Repositories/BusinessRepository'
+import ICustomerRepository from '@Kivora.Domain/Interfaces/ICustomerRepository'
+import CustomerRepository from '@Kivora.Infraestructure/Repositories/CustomerRepository'
+import ICustomerService from '@Kivora.AppCore/Interfaces/ICustomerService'
+import CustomerService from '@Kivora.AppCore/Services/CustomerService'
+import IEmailSenderProvider from '@Kivora.Domain/Interfaces/Providers/IEmailSenderProvider'
+import EmailSenderProvider from '@Kivora.Infraestructure/Providers/EmailSenderProvider'
 
 const container = new Container()
 // User
@@ -40,10 +46,14 @@ container
 // Token
 container.bind<ITokenService>('ITokenService').to(TokenService)
 container.bind<ITokenRepository>('ITokenRepository').to(TokenRepository)
-// Email
+// Email DEPRECATED
 container
     .bind<INodemailerProvider>('INodemailerProvider')
     .to(NodemailerProvider)
+// Email Sender Provider
+container
+    .bind<IEmailSenderProvider>('IEmailSenderProvider')
+    .to(EmailSenderProvider)
 // Image upload provider (CLOUDINARY)
 container
     .bind<IImageUploadProvider>('IImageUploadProvider')
@@ -57,5 +67,10 @@ container.bind<IBusinessService>('IBusinessService').to(BusinessService)
 container
     .bind<IBusinessRepository>('IBusinessRepository')
     .to(BusinessRepository)
+// Customer
+container
+    .bind<ICustomerRepository>('ICustomerRepository')
+    .to(CustomerRepository)
+container.bind<ICustomerService>('ICustomerService').to(CustomerService)
 
 export { container }
