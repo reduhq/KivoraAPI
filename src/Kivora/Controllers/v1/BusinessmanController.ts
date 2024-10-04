@@ -114,11 +114,6 @@ export default class BusinessmanController {
             businessman.user.email
         )
         // Validating
-        if (
-            businessman.user.password !== businessman.user.passwordConfirmation
-        ) {
-            return res.status(400).json('Las contraseñas son diferentes')
-        }
         if (userDB) {
             return res.status(409).json('El username ya esta en uso')
         }
