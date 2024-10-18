@@ -11,7 +11,14 @@ const options = {
             title: 'Kivora API',
             version: '1.0.0'
         },
-        tags: [{ name: 'Auth' }, { name: 'User' }, { name: 'Businessman' }],
+        tags: [
+            { name: 'Auth' },
+            { name: 'User' },
+            { name: 'Businessman' },
+            { name: 'Business' },
+            { name: 'Product' },
+            { name: 'Customer' }
+        ],
         components: {
             securitySchemes: {
                 oAuth2Password: {
