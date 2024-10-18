@@ -83,7 +83,9 @@ model Product {
   description String
   price       Float
   stock       Int
+  category   String
   rate        Int     @default(0)
   isActive    Boolean @default(true)
   tags        String
+  imageUrl    String
 }
