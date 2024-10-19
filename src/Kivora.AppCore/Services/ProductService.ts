@@ -15,6 +15,15 @@ export default class ProductService implements IProductService {
     ) {
         this.productRepository = productRepository
     }
+    public async GetProductsByCategoryInDB(
+        category: string,
+        limit: number
+    ): Promise<Array<Product>> {
+        return await this.productRepository.GetProductsByCategoryInDB(
+            category,
+            limit
+        )
+    }
 
     public async GetRecommendedProduct(id: number): Promise<Array<Product>> {
         const apiUrl = `https://algoritmosugerencia.onrender.com/recomendaciones/${id}`
