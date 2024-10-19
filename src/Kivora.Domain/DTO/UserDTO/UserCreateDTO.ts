@@ -19,7 +19,10 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator'
  *                      example: reduhq@gmail.com
  *                  name:
  *                      type: string
- *                      example: Rey Halsall
+ *                      example: Rey
+ *                  lastname:
+ *                      type: string
+ *                      example:  Halsall
  */
 export default class UserCreateDTO {
     @Expose()
@@ -42,4 +45,9 @@ export default class UserCreateDTO {
     @IsString({ message: 'El nombre no puede estar vacio' })
     @IsNotEmpty({ message: 'El nombre no puede estar vacio' })
     name: string = ''
+
+    @Expose()
+    @IsString({ message: 'El apellido no puede estar vacio' })
+    @IsNotEmpty({ message: 'El apellido no puede estar vacio' })
+    lastname!: string
 }

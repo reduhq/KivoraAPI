@@ -25,6 +25,7 @@ model User {
   password       String   @db.VarChar(60)
   email          String   @unique
   name           String
+  lastname       String
   profilePicture String?
   phone          String?
   role           ROLE
@@ -59,19 +60,19 @@ model Businessman {
 }
 
 model Business {
-  id Int  @id @default(autoincrement())
-  businessmanId Int
-  name String
-  picture String?
-  description String 
-  location String
-  adress String
-  whatsapp String?
-  instagram String?
-  x String?
-  facebook String?
-  rate Int?
-  isActive Boolean   @default(true)
+  id               Int       @id @default(autoincrement())
+  businessmanId    Int
+  name             String
+  picture          String?
+  description      String
+  location         String
+  adress           String
+  whatsapp         String?
+  instagram        String?
+  x                String?
+  facebook         String?
+  rate             Int?
+  isActive         Boolean   @default(true)
   deactivationDate DateTime? // campo para la fecha de desactivación
 
   businessman Businessman @relation(fields: [businessmanId], references: [id], onDelete: Cascade)
@@ -84,7 +85,7 @@ model Product {
   description String
   price       Float
   stock       Int
-  category   String
+  category    String
   rate        Int     @default(0)
   isActive    Boolean @default(true)
   tags        String
