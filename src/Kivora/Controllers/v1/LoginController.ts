@@ -8,7 +8,6 @@ import JWT from '../../../Kivora.Infraestructure/libs/JWT'
 import AuthDTO from '../../../Kivora.Domain/DTO/UserDTO/AuthDTO'
 // import ITokenService from '@Kivora.AppCore/Interfaces/ITokenService'
 // import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
-import path from 'path'
 
 @controller(`${settings.API_V1_STR}`)
 export default class LoginController {
@@ -78,7 +77,6 @@ export default class LoginController {
     ): Promise<Response<AuthDTO>> {
         const { email, password } = req.body
 
-        path.resolve(__dirname, '../EmailTemplates/buildHTML')
         const userExist = await this.userService.GetByEmail(email)
 
         if (!userExist) {
