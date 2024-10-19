@@ -200,4 +200,90 @@ export default class ProductController {
             .status(200)
             .json('El producto ha sido eliminado exitosamente')
     }
+
+    /**
+     *  @swagger
+     *  /api/v1/product/{id}:
+     *      get:
+     *          summary: Get recommended products based on product or user ID
+     *          tags: [Product]
+     *          parameters:
+     *              - in: path
+     *                name: id
+     *                schema:
+     *                  type: integer
+     *                required: true
+     *                description: ID of the product or user for which recommendations are being fetched
+     *          responses:
+     *              200:
+     *                  description: List of recommended products
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              type: array
+     *                              items:
+     *                                  $ref: '#/components/schemas/ProductDTO'
+     *              400:
+     *                  description: Invalid ID supplied
+     *              404:
+     *                  description: Product not found
+     */
+    @httpGet('/:id')
+    public async GetRecommendedProduct(
+        req: Request,
+        res: Response
+    ): Promise<Response> {
+        const { id } = req.params // Obtener el 'id' desde la URL
+        const products = await this.productService.GetRecommendedProduct(
+            Number(id)
+        ) // Convertir el ID a número si es necesario
+        const result = plainToInstance(Product, products)
+        return res.status(200).json(result)
+    }
+
+    /**
+     * @swagger
+     * /api/v1/product/category/{category}:
+     *   get:
+     *     summary: Get products by category
+     *     tags: [Product]
+     *     parameters:
+     *       - in: path
+     *         name: category
+     *         schema:
+     *           type: string
+     *         required: true
+     *         description: The category of the products to be fetched
+     *     responses:
+     *       200:
+     *         description: List of products by category
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 $ref: '#/components/schemas/ProductDTO'
+     *       400:
+     *         description: Invalid category supplied
+     *       404:
+     *         description: No products found for the given category
+     */
+    @httpGet('/category/:category')
+    public async GetProductsByCategory(
+        req: Request,
+        res: Response
+    ): Promise<Response> {
+        console.log('dasd')
+        const { category } = req.params // Obtener la categoría desde la URL
+
+        // console.log(category)
+
+        const products = await this.productService.GetProductsByCategoryInDB(
+            category,
+            10
+        )
+
+        const result = plainToInstance(Product, products)
+        return res.status(200).json(result)
+    }
 }
