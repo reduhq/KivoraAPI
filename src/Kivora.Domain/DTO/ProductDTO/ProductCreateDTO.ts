@@ -26,6 +26,12 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
  *                  tags:
  *                      type: string
  *                      example: ''
+ *                  category:
+ *                      type: string
+ *                      example: ''
+ *                  imageUrl:
+ *                      type: string
+ *                      example: ''
  */
 export default class ProductCreateDTO {
     @Expose()
@@ -51,6 +57,16 @@ export default class ProductCreateDTO {
     @IsNumber()
     @IsNotEmpty({ message: 'La cantidad del producto no puede estar vacia' })
     public stock!: number
+
+    @Expose()
+    @IsString()
+    @IsNotEmpty({ message: 'La categoria del producto no puede estar vacia' })
+    public category!: string
+
+    @Expose()
+    @IsString()
+    @IsNotEmpty({ message: 'La imagen del producto no puede estar vacia' })
+    public imageUrl!: string
 
     @Expose()
     @IsString()
