@@ -4,6 +4,7 @@ import ProductUpdateDTO from '@Kivora.Domain/DTO/ProductDTO/ProductUpdateDTO'
 import Product from '@Kivora.Domain/Entities/Product'
 import IProductRepository from '@Kivora.Domain/Interfaces/IProductRepository'
 import { inject, injectable } from 'inversify'
+import axios from 'axios'
 
 @injectable()
 export default class ProductService implements IProductService {
@@ -13,6 +14,28 @@ export default class ProductService implements IProductService {
         @inject('IProductRepository') productRepository: IProductRepository
     ) {
         this.productRepository = productRepository
+    }
+
+    public async GetRecommendedProduct(id: number): Promise<Array<Product>> {
+        const apiUrl = `https://algoritmosugerencia.onrender.com/recomendaciones/${id}`
+
+        try {
+            // Realiza la solicitud GET a la API
+            const response = await axios.get<Array<{ id2: number }>>(apiUrl)
+
+            // Extraer el campo 'id2' de cada elemento del arreglo
+            const ids2 = response.data.map((product) => product.id2)
+
+            // Devuelve solo los valores de 'id2'
+            return await this.productRepository.GetRecommendedProductInDB(ids2)
+        } catch (error) {
+            console.error(
+                'Error al consultar la API de recomendaciones:',
+                error
+            )
+            // En caso de error, puedes lanzar una excepción o devolver un array vacío
+            throw new Error('No se pudo obtener las recomendaciones')
+        }
     }
 
     public async Create(t: ProductCreateDTO): Promise<Product> {
