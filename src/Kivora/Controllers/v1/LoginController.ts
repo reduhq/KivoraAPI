@@ -6,6 +6,7 @@ import settings from '../../../Kivora.Infraestructure/Settings'
 import ValidationMiddleware from '../../Middlewares/ValidationMiddleware'
 import JWT from '../../../Kivora.Infraestructure/libs/JWT'
 import AuthDTO from '../../../Kivora.Domain/DTO/UserDTO/AuthDTO'
+import path from 'path'
 // import ITokenService from '@Kivora.AppCore/Interfaces/ITokenService'
 // import INodemailerProvider from '@Kivora.Domain/Interfaces/Providers/INodemailerProvider'
 
@@ -76,6 +77,8 @@ export default class LoginController {
         res: Response
     ): Promise<Response<AuthDTO>> {
         const { username, password } = req.body
+
+        console.log(path.resolve(__dirname, '../EmailTemplates/buildHTML'))
 
         const usernameExist = await this.userService.GetByUsername(username)
 
