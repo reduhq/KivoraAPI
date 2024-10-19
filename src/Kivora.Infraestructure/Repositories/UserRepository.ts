@@ -84,28 +84,18 @@ export default class UserRepository implements IUserRepository {
         return user ? plainToInstance(User, user) : null
     }
     public async Update(_id: number, _t: UserUpdateDTO): Promise<User> {
-        throw new Error('Method not implemented.')
-        // if (!_t.id) {
-        //     throw new Error('ID is required for updating the user')
-        // }
+        if (!_id) {
+            throw new Error('ID is required for updating the user')
+        }
 
-        // const updatedUser = await this.context.user.update({
-        //     where: {
-        //         id: _t.id // Usamos el ID para encontrar el usuario
-        //     },
-        //     data: {
-        //         username: _t.username,
-        //         email: _t.email,
-        //         password: _t.password,
-        //         name: _t.name,
-        //         profilePicture: _t.profilePicture,
-        //         phone: _t.phone,
-        //         confirmed: _t.confirmed,
-        //         role: _t.role
-        //     }
-        // })
+        const updatedUser = await this.context.user.update({
+            where: {
+                id: _id // Usamos el ID para encontrar el usuario
+            },
+            data: _t
+        })
 
-        // return plainToInstance(User, updatedUser) // Convertir el resultado a instancia de User
+        return plainToInstance(User, updatedUser) // Convertir el resultado a instancia de User
     }
 
     public async Create(t: UserCreateDTO, role?: ROLE): Promise<User> {
