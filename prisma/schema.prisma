@@ -25,7 +25,7 @@ model User {
   password       String   @db.VarChar(60)
   email          String   @unique
   name           String
-  lastname       String
+  lastname       String?  @default("")
   profilePicture String?
   phone          String?
   role           ROLE
