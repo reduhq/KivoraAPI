@@ -35,20 +35,9 @@ model User {
   businessman Businessman?
   client      Customer?
 
-  token   Token? @relation("UserToken")
   tokenId Int?   @unique
 
   @@index([username])
-}
-
-model Token {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
-  userId    Int      @unique
-  expiresAt DateTime @default(now()) @db.Timestamptz
-  user      User     @relation("UserToken", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
 }
 
 model Businessman {
@@ -76,6 +65,7 @@ model Business {
   deactivationDate DateTime? // campo para la fecha de desactivación
 
   businessman Businessman @relation(fields: [businessmanId], references: [id], onDelete: Cascade)
+  products Product[]
 }
 
 model Product {
@@ -89,11 +79,27 @@ model Product {
   rate        Int     @default(0)
   isActive    Boolean @default(true)
   tags        String
-  imageUrl    String
+  imageUrl    String?
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  review Review[]
 }
 
 model Customer {
   id Int @unique
 
   user User @relation(fields: [id], references: [id], onDelete: Cascade)
+  review Review[]
+}
+
+model Review{
+  id Int @unique
+  productId Int
+  customerId Int
+  rate Int
+  comment String?
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
