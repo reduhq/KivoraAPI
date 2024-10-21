@@ -1,11 +1,11 @@
-#! /usr/bin/env sh
-
-# Compile to TS
-npm run build
+#! /usr/bin/env bash
 
 # Run the migrations
 npx prisma generate
-npx prisma migrate dev
+npx prisma migrate deploy
+
+# Compile to TS
+npm run build
 
 # Run the api
 npm run start
