@@ -75,9 +75,9 @@ export default class LoginController {
         req: Request,
         res: Response
     ): Promise<Response<AuthDTO>> {
-        const { email, password } = req.body
+        const { username, password } = req.body
 
-        const userExist = await this.userService.GetByEmail(email)
+        const userExist = await this.userService.GetByUsername(username)
 
         if (!userExist) {
             return res.status(400).json({ message: 'Usuario no encontrado' })
@@ -87,7 +87,7 @@ export default class LoginController {
             return res.status(401).json('Tu cuenta aún no ha sido confirmada')
         }
 
-        const user = await this.userService.Authenticate(email, password)
+        const user = await this.userService.Authenticate(username, password)
 
         if (!user) {
             return res.status(401).json({ message: 'Credenciales incorrectas' })

@@ -31,10 +31,10 @@ export default class UserService implements IUserService {
     }
 
     public async Authenticate(
-        email: string,
+        username: string,
         password: string
     ): Promise<User | null> {
-        const user = await this.userRepository.GetByEmail(email)
+        const user = await this.userRepository.GetByUsername(username)
         if (!user) {
             return null
         }
