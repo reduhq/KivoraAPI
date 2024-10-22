@@ -54,9 +54,6 @@ export default class UserService implements IUserService {
     public async GetByEmail(email: string): Promise<User | null> {
         return await this.userRepository.GetByEmail(email)
     }
-    public async GetUserByToken(token: string): Promise<User | null> {
-        return await this.userRepository.GetUserByToken(token)
-    }
     public async Create(t: UserCreateDTO, role?: ROLE): Promise<User> {
         t.password = await Security.HashPassword(t.password)
         return await this.userRepository.Create(t, role)

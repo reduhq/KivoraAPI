@@ -11,4 +11,5 @@ export default interface IProductRepository
         category: string,
         limit: number
     ): Promise<Array<Product>>
+    Count(): Promise<number>
 }

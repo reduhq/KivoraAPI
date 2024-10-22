@@ -10,4 +10,5 @@ export default interface IProductService
         category: string,
         limit: number
     ): Promise<Array<Product>>
+    Count(): Promise<number>
 }

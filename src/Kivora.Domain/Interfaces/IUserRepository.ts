@@ -12,5 +12,4 @@ export default interface IUserRepository
     GetById(id: number): Promise<User>
     UpdateProfilePicture(userId: number, url: string): Promise<boolean>
     ActivateUser(id: number): Promise<User>
-    GetUserByToken(token: string): Promise<User | null>
 }

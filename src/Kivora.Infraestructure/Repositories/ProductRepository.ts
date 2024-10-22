@@ -15,6 +15,10 @@ export default class ProductRepository implements IProductRepository {
         this.context = KivoraContext
     }
 
+    public async Count(): Promise<number> {
+        return await this.context.product.count()
+    }
+
     public async GetProductsByCategoryInDB(
         category: string,
         limit: number
@@ -105,8 +109,11 @@ export default class ProductRepository implements IProductRepository {
         return !!product
     }
 
-    public async GetAll(): Promise<Product[]> {
-        const product = await this.context.product.findMany()
+    public async GetAll(limit: number, page: number): Promise<Product[]> {
+        const product = await this.context.product.findMany({
+            skip: page * limit,
+            take: limit
+        })
         return plainToInstance(Product, product)
     }
 }

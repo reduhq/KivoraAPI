@@ -7,10 +7,6 @@ import IBusinessmanRepository from '../Kivora.Domain/Interfaces/IBusinessmanRepo
 import BusinessmanRepository from '../Kivora.Infraestructure/Repositories/BusinessmanRepository'
 import IBusinessmanService from '../Kivora.AppCore/Interfaces/IBusinessmanService'
 import BusinessmanService from '../Kivora.AppCore/Services/BusinessmanService'
-import ITokenService from '@Kivora.AppCore/Interfaces/ITokenService'
-import TokenService from '@Kivora.AppCore/Services/TokenService'
-import ITokenRepository from '@Kivora.Domain/Interfaces/ITokenRepository'
-import TokenRepository from '@Kivora.Infraestructure/Repositories/TokenRepository'
 import IImageUploadProvider from '@Kivora.Domain/Interfaces/Providers/IImageUploadProvider'
 import CloudinaryProvider from '@Kivora.Infraestructure/Providers/CloudinaryProvider'
 import IProductService from '@Kivora.AppCore/Interfaces/IProductService'
@@ -43,9 +39,6 @@ container
 container
     .bind<IBusinessmanService>('IBusinessmanService')
     .to(BusinessmanService)
-// Token
-container.bind<ITokenService>('ITokenService').to(TokenService)
-container.bind<ITokenRepository>('ITokenRepository').to(TokenRepository)
 // Email DEPRECATED
 container
     .bind<INodemailerProvider>('INodemailerProvider')

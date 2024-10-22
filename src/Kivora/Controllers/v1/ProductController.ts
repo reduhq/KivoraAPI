@@ -15,7 +15,7 @@ import Product from '@Kivora.Domain/Entities/Product'
 import { plainToInstance } from 'class-transformer'
 import ProductDTO from '@Kivora.Domain/DTO/ProductDTO/ProductDTO'
 import JWTMiddleware from '@Kivora/Middlewares/JWTMiddleware'
-import { param } from 'express-validator'
+import { param, query } from 'express-validator'
 import ProductUpdateDTO from '@Kivora.Domain/DTO/ProductDTO/ProductUpdateDTO'
 
 @controller(`${settings.API_V1_STR}/product`)
@@ -38,6 +38,17 @@ export default class ProductController {
      *      get:
      *          summary: Get all registered products
      *          tags: [Product]
+     *          parameters:
+     *              -   in: query
+     *                  name: page
+     *                  required: false
+     *                  schema:
+     *                      type: number
+     *              -   in: query
+     *                  name: limit
+     *                  required: false
+     *                  schema:
+     *                      type: number
      *          responses:
      *              200:
      *                  description: List of products
@@ -48,11 +59,37 @@ export default class ProductController {
      *                              items:
      *                                  $ref: '#/components/schemas/ProductDTO'
      */
-    @httpGet('/')
-    public async GetAll(_req: Request, res: Response): Promise<Response> {
-        const products = await this.productService.GetAll()
+    @httpGet(
+        '/',
+        query('limit')
+            .isNumeric()
+            .withMessage('el limite tiene que ser numerico')
+            .default(25),
+        query('page')
+            .isNumeric()
+            .withMessage('La pagina tiene que ser un numero')
+            .default(0)
+    )
+    public async GetAll(req: Request, res: Response): Promise<Response> {
+        const { limit, page } = req.query
+        const products = await this.productService.GetAll(
+            Number(limit),
+            Number(page)
+        )
         const result = plainToInstance(Product, products)
-        return res.status(200).json(result)
+
+        const count: number = await this.productService.Count()
+        const totalPages = Math.ceil(count / Number(limit))
+        const response = {
+            data: result,
+            currentPage: Number(page),
+            totalPages: totalPages,
+            totalProducts: count,
+            pageSize: Number(limit),
+            hasNextPage: Number(page) < totalPages,
+            hasPreviousPage: Number(page) > 0
+        }
+        return res.status(200).json(response)
     }
 
     /**

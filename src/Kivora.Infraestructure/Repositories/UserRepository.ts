@@ -69,20 +69,7 @@ export default class UserRepository implements IUserRepository {
         })
         return plainToInstance(User, user)
     }
-    public async GetUserByToken(token: string): Promise<User | null> {
-        const user = await this.context.user.findFirst({
-            where: {
-                token: {
-                    token: token
-                }
-            },
-            include: {
-                token: true
-            }
-        })
 
-        return user ? plainToInstance(User, user) : null
-    }
     public async Update(_id: number, _t: UserUpdateDTO): Promise<User> {
         if (!_id) {
             throw new Error('ID is required for updating the user')

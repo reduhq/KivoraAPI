@@ -15,6 +15,11 @@ export default class ProductService implements IProductService {
     ) {
         this.productRepository = productRepository
     }
+
+    public async Count(): Promise<number> {
+        return await this.productRepository.Count()
+    }
+
     public async GetProductsByCategoryInDB(
         category: string,
         limit: number
@@ -70,7 +75,7 @@ export default class ProductService implements IProductService {
         return this.productRepository.Delete(id)
     }
 
-    public async GetAll(): Promise<Product[]> {
-        return await this.productRepository.GetAll()
+    public async GetAll(limit: number, page: number): Promise<Product[]> {
+        return await this.productRepository.GetAll(limit, page)
     }
 }
