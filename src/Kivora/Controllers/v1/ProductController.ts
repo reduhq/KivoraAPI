@@ -94,6 +94,41 @@ export default class ProductController {
 
     /**
      *  @swagger
+     *  /api/v1/product/{id}:
+     *      get:
+     *          summary: Get a single product
+     *          tags: [Product]
+     *          parameters:
+     *              -   in: path
+     *                  name: id
+     *                  required: true
+     *                  schema:
+     *                      type: integer
+     *          responses:
+     *              200:
+     *                  description: Product data
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              $ref: '#/components/schemas/ProductDTO'
+     */
+    @httpGet(
+        '/:id',
+        param('id')
+            .isNumeric()
+            .withMessage('El id debe de ser un numero')
+            .notEmpty()
+            .withMessage('EL id no puede estar vacio')
+    )
+    public async GetById(req: Request, res: Response): Promise<Response> {
+        const { id } = req.params
+        const product = await this.productService.GetById(Number(id))
+        const response = plainToInstance(ProductDTO, product)
+        return res.status(200).json(response)
+    }
+
+    /**
+     *  @swagger
      *  /api/v1/product:
      *      post:
      *          summary: Create a new product
@@ -240,7 +275,7 @@ export default class ProductController {
 
     /**
      *  @swagger
-     *  /api/v1/product/{id}:
+     *  /api/v1/product/user/{id}:
      *      get:
      *          summary: Get recommended products based on product or user ID
      *          tags: [Product]
@@ -265,7 +300,7 @@ export default class ProductController {
      *              404:
      *                  description: Product not found
      */
-    @httpGet('/:id')
+    @httpGet('/user/:id')
     public async GetRecommendedProduct(
         req: Request,
         res: Response

@@ -11,4 +11,5 @@ export default interface IProductService
         limit: number
     ): Promise<Array<Product>>
     Count(): Promise<number>
+    GetById(id: number): Promise<Product | null>
 }

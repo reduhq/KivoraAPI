@@ -16,6 +16,10 @@ export default class ProductService implements IProductService {
         this.productRepository = productRepository
     }
 
+    public async GetById(id: number): Promise<Product | null> {
+        return await this.productRepository.GetById(id)
+    }
+
     public async Count(): Promise<number> {
         return await this.productRepository.Count()
     }
