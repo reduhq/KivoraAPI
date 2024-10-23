@@ -22,6 +22,9 @@ import { Expose } from 'class-transformer'
  *                  price:
  *                      type: float
  *                      example: 1500
+ *                  imageUrl:
+ *                      type: string
+ *                      example: ''
  *                  stock:
  *                      type: integer
  *                      example: 5
@@ -47,6 +50,9 @@ export default class ProductDTO {
 
     @Expose()
     public description: string = ''
+
+    @Expose()
+    public imageUrl: string = ''
 
     @Expose()
     public price: number = 0.0

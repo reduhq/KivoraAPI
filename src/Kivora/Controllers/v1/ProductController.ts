@@ -123,7 +123,9 @@ export default class ProductController {
     public async GetById(req: Request, res: Response): Promise<Response> {
         const { id } = req.params
         const product = await this.productService.GetById(Number(id))
-        const response = plainToInstance(ProductDTO, product)
+        const response = plainToInstance(ProductDTO, product, {
+            excludeExtraneousValues: true
+        })
         return res.status(200).json(response)
     }
 

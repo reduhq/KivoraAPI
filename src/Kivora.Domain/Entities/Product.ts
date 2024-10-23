@@ -14,6 +14,9 @@ export default class Product {
     public description: string = ''
 
     @Expose()
+    public imageUrl: string = ''
+
+    @Expose()
     public price: number = 0.0
 
     @Expose()

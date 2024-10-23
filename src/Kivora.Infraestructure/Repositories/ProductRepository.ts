@@ -33,7 +33,7 @@ export default class ProductRepository implements IProductRepository {
             })
 
             // Retorna los productos encontrados
-            return productsByCategory
+            return plainToInstance(Product, productsByCategory)
         } catch (error) {
             console.error('Error al consultar la base de datos:', error)
             // En caso de error, puedes lanzar una excepción o devolver un array vacío
@@ -57,7 +57,7 @@ export default class ProductRepository implements IProductRepository {
             })
 
             // Retorna los productos encontrados
-            return recommendedProducts
+            return plainToInstance(Product, recommendedProducts)
         } catch (error) {
             console.error('Error al consultar la base de datos:', error)
             // En caso de error, puedes lanzar una excepción o devolver un array vacío
