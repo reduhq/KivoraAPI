@@ -38,6 +38,7 @@ import './Controllers/v1/BusinessmanController'
 import './Controllers/v1/ProductController'
 import './Controllers/v1/BusinessController'
 import './Controllers/v1/CustomerController'
+import './Controllers/v1/SearchController'
 
 const app = server.build()
 

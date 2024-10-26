@@ -12,6 +12,9 @@ class Settings {
     public readonly ACCESS_TOKEN_EXPIRES_MINUTES: number = 60 * 5 // 5 Mins
     public readonly ALGORITHM: string = 'HS256'
 
+    //REDIS
+    public readonly REDIS_TOKEN: string = process.env.REDIS_TOKEN as string
+
     // SMTP config
     public readonly SMTP_HOST?: string = process.env.SMTP_HOST as string
     public readonly SMTP_TLS: boolean = true

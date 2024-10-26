@@ -27,6 +27,10 @@ import ICustomerService from '@Kivora.AppCore/Interfaces/ICustomerService'
 import CustomerService from '@Kivora.AppCore/Services/CustomerService'
 import IEmailSenderProvider from '@Kivora.Domain/Interfaces/Providers/IEmailSenderProvider'
 import EmailSenderProvider from '@Kivora.Infraestructure/Providers/EmailSenderProvider'
+import ISearchService from '@Kivora.AppCore/Interfaces/ISearchService'
+import SearchService from '@Kivora.AppCore/Services/SearchService'
+import ISearchRepository from '@Kivora.Domain/Interfaces/ISearchRepository'
+import SearchRepository from '@Kivora.Infraestructure/Repositories/SearchRepository'
 
 const container = new Container()
 // User
@@ -65,5 +69,8 @@ container
     .bind<ICustomerRepository>('ICustomerRepository')
     .to(CustomerRepository)
 container.bind<ICustomerService>('ICustomerService').to(CustomerService)
+// Search STR
+container.bind<ISearchService>('ISearchService').to(SearchService)
+container.bind<ISearchRepository>('ISearchRepository').to(SearchRepository)
 
 export { container }
