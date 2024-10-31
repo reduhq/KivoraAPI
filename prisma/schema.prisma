@@ -20,7 +20,7 @@ enum ROLE {
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
+  id             String   @unique
   username       String   @unique
   password       String   @db.VarChar(60)
   email          String   @unique
@@ -35,13 +35,13 @@ model User {
   businessman Businessman?
   client      Customer?
 
-  tokenId Int?   @unique
+  tokenId Int? @unique
 
   @@index([username])
 }
 
 model Businessman {
-  id Int @unique
+  id String @unique
 
   user User @relation(fields: [id], references: [id], onDelete: Cascade)
 
@@ -50,7 +50,7 @@ model Businessman {
 
 model Business {
   id               Int       @id @default(autoincrement())
-  businessmanId    Int
+  businessmanId    String
   name             String
   picture          String?
   description      String
@@ -65,11 +65,11 @@ model Business {
   deactivationDate DateTime? // campo para la fecha de desactivación
 
   businessman Businessman @relation(fields: [businessmanId], references: [id], onDelete: Cascade)
-  products Product[]
+  products    Product[]
 }
 
 model Product {
-  id          Int     @id @default(autoincrement())
+  id          String  @id
   businessId  Int
   name        String
   description String
@@ -82,24 +82,24 @@ model Product {
   imageUrl    String?
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  review Review[]
+  review   Review[]
 }
 
 model Customer {
-  id Int @unique
+  id String @unique
 
-  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+  user   User     @relation(fields: [id], references: [id], onDelete: Cascade)
   review Review[]
 }
 
-model Review{
-  id Int @unique
-  productId Int
-  customerId Int
-  rate Int
-  comment String?
-  createdAt DateTime @default(now())
+model Review {
+  id         String   @unique
+  productId  String
+  customerId String
+  rate       Int
+  comment    String?
+  createdAt  DateTime @default(now())
 
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
