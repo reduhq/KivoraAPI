@@ -22,7 +22,7 @@ export default class CustomerRepository implements IClientRepository {
     public async GetById(id: number): Promise<Customer | null> {
         const customer = await this.context.customer.findFirst({
             where: {
-                id
+                id: id.toString()
             },
             select: {
                 id: true,
@@ -63,7 +63,7 @@ export default class CustomerRepository implements IClientRepository {
                     update: t.user
                 }
             },
-            where: { id }
+            where: { id: id.toString() }
         })
         return plainToInstance(Customer, customer, {
             excludeExtraneousValues: true

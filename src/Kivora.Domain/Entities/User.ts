@@ -1,5 +1,5 @@
 export default class User {
-    private _id: number
+    private _id: string
     private _username: string
     private _password: string
     private _email: string
@@ -11,7 +11,7 @@ export default class User {
     private _confirmed: boolean
 
     constructor(
-        id: number,
+        id: string,
         username: string,
         password: string,
         email: string,
@@ -30,11 +30,11 @@ export default class User {
         this._confirmed = confirmed
     }
 
-    public get id(): number {
+    public get id(): string {
         return this._id
     }
 
-    public set id(id: number) {
+    public set id(id: string) {
         this._id = id
     }
 

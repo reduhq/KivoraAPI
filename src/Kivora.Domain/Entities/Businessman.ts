@@ -2,19 +2,19 @@ import { Expose } from 'class-transformer'
 import User from './User'
 
 export default class Businessman {
-    private _id: number
+    private _id: string
     private _user: User | null
 
-    constructor(id: number, user: User) {
+    constructor(id: string, user: User) {
         this._id = id
         this._user = user
     }
 
-    public get id(): number {
+    public get id(): string {
         return this._id
     }
 
-    @Expose() public set id(id: number) {
+    @Expose() public set id(id: string) {
         this._id = id
     }
 

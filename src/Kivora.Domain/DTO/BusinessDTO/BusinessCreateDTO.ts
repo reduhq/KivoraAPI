@@ -52,7 +52,7 @@ export default class BusinessCreateDTO {
     @IsNotEmpty({
         message: 'Se necesita especificar el emprendedor del negocio'
     })
-    businessmanId!: number
+    businessmanId!: string
 
     @Expose()
     @IsString()

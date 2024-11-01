@@ -25,7 +25,7 @@ export default class UserRepository implements IUserRepository {
                 profilePicture: url
             },
             where: {
-                id: userId
+                id: userId.toString()
             }
         })
         return true
@@ -34,7 +34,7 @@ export default class UserRepository implements IUserRepository {
     public async ActivateUser(id: number): Promise<User> {
         const user = await this.context.user.update({
             where: {
-                id
+                id: id.toString()
             },
             data: {
                 confirmed: true
@@ -46,7 +46,7 @@ export default class UserRepository implements IUserRepository {
     public async GetById(id: number): Promise<User> {
         const user = await this.context.user.findFirst({
             where: {
-                id
+                id: id.toString()
             }
         })
         return plainToInstance(User, user)
@@ -77,7 +77,7 @@ export default class UserRepository implements IUserRepository {
 
         const updatedUser = await this.context.user.update({
             where: {
-                id: _id // Usamos el ID para encontrar el usuario
+                id: _id.toString() // Usamos el ID para encontrar el usuario
             },
             data: _t
         })
@@ -88,6 +88,7 @@ export default class UserRepository implements IUserRepository {
     public async Create(t: UserCreateDTO, role?: ROLE): Promise<User> {
         const userResponse = await this.context.user.create({
             data: {
+                id: 'DELETE THIS FIELD',
                 username: t.username,
                 password: t.password,
                 email: t.email,

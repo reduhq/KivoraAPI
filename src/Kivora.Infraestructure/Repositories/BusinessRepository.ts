@@ -17,7 +17,7 @@ export default class BusinessRepository implements IBusinessRepository {
     public async GetByBusinessman(_id: number): Promise<Business[]> {
         const businesses = await this.context.business.findMany({
             where: {
-                businessmanId: _id
+                businessmanId: _id.toString()
             }
         })
 

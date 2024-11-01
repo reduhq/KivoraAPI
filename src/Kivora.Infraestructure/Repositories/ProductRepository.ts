@@ -51,7 +51,7 @@ export default class ProductRepository implements IProductRepository {
             const recommendedProducts = await this.context.product.findMany({
                 where: {
                     id: {
-                        in: ids // Busca todos los productos cuyo id esté en el array `ids`
+                        in: ids.map((i) => i.toString()) // Busca todos los productos cuyo id esté en el array `ids`
                     }
                 }
             })
@@ -70,7 +70,7 @@ export default class ProductRepository implements IProductRepository {
     public async GetById(id: number): Promise<Product | null> {
         const product = await this.context.product.findFirst({
             where: {
-                id
+                id: id.toString()
             }
         })
         if (!product) return null
@@ -81,7 +81,17 @@ export default class ProductRepository implements IProductRepository {
 
     public async Create(t: ProductCreateDTO): Promise<Product> {
         const product = await this.context.product.create({
-            data: t
+            data: {
+                id: 'REMOVE THIS FIELD,',
+                businessId: t.businessId,
+                name: t.name,
+                description: t.description,
+                price: t.price,
+                stock: t.stock,
+                category: t.category,
+                imageUrl: t.imageUrl,
+                tags: t.tags
+            }
         })
         return plainToInstance(Product, product, {
             excludeExtraneousValues: true
@@ -92,7 +102,7 @@ export default class ProductRepository implements IProductRepository {
         const product = await this.context.product.update({
             data: t,
             where: {
-                id
+                id: id.toString()
             }
         })
         return plainToInstance(Product, product, {
@@ -103,7 +113,7 @@ export default class ProductRepository implements IProductRepository {
     public async Delete(id: number): Promise<boolean> {
         const product = await this.context.product.delete({
             where: {
-                id
+                id: id.toString()
             }
         })
         return !!product

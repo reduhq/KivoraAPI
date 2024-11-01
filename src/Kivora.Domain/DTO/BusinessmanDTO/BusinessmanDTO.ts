@@ -16,7 +16,7 @@ import UserDTO from '../UserDTO/UserDTO'
  */
 export default class BusinessmanDTO {
     @Expose()
-    id: number = 0
+    id!: string
 
     @Expose()
     @Type(() => UserDTO)

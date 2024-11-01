@@ -9,7 +9,7 @@ import { Expose } from 'class-transformer'
  *              type: object
  *              properties:
  *                  id:
- *                      type: integer
+ *                      type: string
  *                      example: 1
  *                  username:
  *                      type: string
@@ -35,7 +35,7 @@ import { Expose } from 'class-transformer'
  */
 export default class UserDTO {
     @Expose()
-    id: number = 0
+    id!: string
 
     @Expose()
     username: string = ''

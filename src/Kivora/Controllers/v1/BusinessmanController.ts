@@ -124,7 +124,7 @@ export default class BusinessmanController {
         const newBusinessman: Businessman =
             await this.businessmanService.Create(businessman)
         // Generating the token
-        const token = JWT.GenerateNewAccountToken(newBusinessman.id)
+        const token = JWT.GenerateNewAccountToken(parseInt(newBusinessman.id))
         // Sending an email to verify if the user is real and activate the account
         if (settings.EMAILS_ENABLED && businessman.user.email) {
             await this.emailSenderProvider.SendNewAccountEmail(

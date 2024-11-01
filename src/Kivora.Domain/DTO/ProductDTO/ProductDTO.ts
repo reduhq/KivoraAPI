@@ -40,7 +40,7 @@ import { Expose } from 'class-transformer'
  */
 export default class ProductDTO {
     @Expose()
-    public id: number = 0
+    public id!: string
 
     @Expose()
     public businessId: number = 0

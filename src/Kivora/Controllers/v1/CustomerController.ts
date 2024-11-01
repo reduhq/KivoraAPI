@@ -109,7 +109,7 @@ export default class CustomerController {
         // creating the client
         const client = await this.customerService.Create(clientData)
         // Create token
-        const token = JWT.GenerateNewAccountToken(client.id)
+        const token = JWT.GenerateNewAccountToken(parseInt(client.id))
         // Sending the confirmation email
         if (settings.EMAILS_ENABLED && clientData.user.email) {
             await this.emailSenderProvider.SendNewAccountEmail(

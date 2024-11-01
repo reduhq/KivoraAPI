@@ -3,7 +3,7 @@ import User from './User'
 
 export default class Customer {
     @Expose()
-    public id!: number
+    public id!: string
 
     @Expose()
     public user?: User

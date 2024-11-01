@@ -15,6 +15,12 @@ class Settings {
     //REDIS
     public readonly REDIS_TOKEN: string = process.env.REDIS_TOKEN as string
 
+    // ALGOLIA
+    public readonly ALGOLIA_API_KEY: string = process.env
+        .ALGOLIA_API_KEY as string
+    public readonly ALGOLIA_APP_ID: string = process.env
+        .ALGOLIA_APP_ID as string
+
     // SMTP config
     public readonly SMTP_HOST?: string = process.env.SMTP_HOST as string
     public readonly SMTP_TLS: boolean = true

@@ -2,10 +2,10 @@ import { Expose } from 'class-transformer'
 
 export default class Product {
     @Expose()
-    public id: number = 0
+    public id!: string
 
     @Expose()
-    public businessId: number = 0
+    public businessId!: string
 
     @Expose()
     public name: string = ''

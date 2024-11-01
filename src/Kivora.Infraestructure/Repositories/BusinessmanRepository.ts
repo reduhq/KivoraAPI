@@ -28,7 +28,7 @@ export default class BusinessmanRepository implements IBusinessmanRepository {
                 user: true
             },
             where: {
-                id
+                id: id.toString()
             }
         })
         if (!businessman) return null
@@ -73,7 +73,7 @@ export default class BusinessmanRepository implements IBusinessmanRepository {
                 }
             },
             where: {
-                id
+                id: id.toString()
             }
         })
         return plainToInstance(Businessman, businessman, {
