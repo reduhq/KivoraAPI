@@ -4,4 +4,6 @@ import SearchCreateDTO from '@Kivora.Domain/DTO/SearchDTO/SearchCreateDTO'
 import SearchUpdateDTO from '@Kivora.Domain/DTO/SearchDTO/SearchUpdateDTO'
 
 export default interface ISearchRepository
-    extends IRepository<Search, SearchCreateDTO, SearchUpdateDTO> {}
+    extends IRepository<Search, SearchCreateDTO, SearchUpdateDTO> {
+    SearchQuery(query: string): Promise<Search[]>
+}

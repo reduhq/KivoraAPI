@@ -1,4 +1,4 @@
-import { SearchClient } from '@algolia/client-search'
+import { SearchClient, SearchResponses } from '@algolia/client-search'
 import SearchCreateDTO from '@Kivora.Domain/DTO/SearchDTO/SearchCreateDTO'
 import SearchUpdateDTO from '@Kivora.Domain/DTO/SearchDTO/SearchUpdateDTO'
 import Search from '@Kivora.Domain/Entities/Search'
@@ -17,6 +17,28 @@ export default class SearchRepository implements ISearchRepository {
         this.context = redis
         this.algoliaContext = algoliaClient
     }
+
+    public async SearchQuery(query: string): Promise<Search[]> {
+        console.log('ohla?')
+        const response: SearchResponses<Search> =
+            await this.algoliaContext.search<Search>({
+                requests: [
+                    {
+                        indexName: 'search_index',
+                        query: query,
+                        hitsPerPage: 5
+                    }
+                ]
+            })
+        return plainToInstance(
+            Search,
+            (response.results[0] as { hits: Search[] }).hits,
+            {
+                excludeExtraneousValues: true
+            }
+        )
+    }
+
     public async Create(t: SearchCreateDTO): Promise<Search> {
         await this.context.zincrby('search', 1, t.text)
         // const search = { text: t.text }
@@ -50,13 +72,14 @@ export default class SearchRepository implements ISearchRepository {
             excludeExtraneousValues: true
         })
     }
+
     Update(_id: number, _t: SearchUpdateDTO): Promise<Search> {
         throw new Error('Method not implemented.')
     }
     Delete(_id: number): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
-    GetAll(_limit?: number, _page?: number): Promise<Search[]> {
+    public async GetAll(_limit?: number, _page?: number): Promise<Search[]> {
         throw new Error('Method not implemented.')
     }
 }

@@ -14,6 +14,10 @@ export default class SearchService implements ISearchService {
         this.searchRepository = searchRepository
     }
 
+    public async SearchQuery(query: string): Promise<Search[]> {
+        return await this.searchRepository.SearchQuery(query)
+    }
+
     public async Create(t: SearchCreateDTO): Promise<Search> {
         return await this.searchRepository.Create(t)
     }

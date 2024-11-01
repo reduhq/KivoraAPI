@@ -4,4 +4,6 @@ import SearchUpdateDTO from '@Kivora.Domain/DTO/SearchDTO/SearchUpdateDTO'
 import IService from './IService'
 
 export default interface ISearchService
-    extends IService<Search, SearchCreateDTO, SearchUpdateDTO> {}
+    extends IService<Search, SearchCreateDTO, SearchUpdateDTO> {
+    SearchQuery(query: string): Promise<Search[]>
+}

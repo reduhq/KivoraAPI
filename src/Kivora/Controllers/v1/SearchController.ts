@@ -4,9 +4,10 @@ import SearchCreateDTO from '@Kivora.Domain/DTO/SearchDTO/SearchCreateDTO'
 import settings from '@Kivora.Infraestructure/Settings'
 import ValidationMiddleware from '@Kivora/Middlewares/ValidationMiddleware'
 import { inject } from 'inversify'
-import { controller, httpPost } from 'inversify-express-utils'
+import { controller, httpGet, httpPost } from 'inversify-express-utils'
 import { plainToInstance } from 'class-transformer'
 import SearchDTO from '@Kivora.Domain/DTO/SearchDTO/SearchDTO'
+import { param } from 'express-validator'
 
 @controller(`${settings.API_V1_STR}/search`)
 export default class SearchController {
@@ -46,6 +47,44 @@ export default class SearchController {
         const search = req.body
         const searchStr = await this.searchService.Create(search)
         const response = plainToInstance(SearchDTO, searchStr, {
+            excludeExtraneousValues: true
+        })
+        return res.status(200).json(response)
+    }
+
+    /**
+     *  @swagger
+     *  /api/v1/search/{search_query}:
+     *      get:
+     *          summary: Get recommendations from a user query
+     *          tags: [Search]
+     *          parameters:
+     *              -   in: path
+     *                  name: search_query
+     *                  required: true
+     *                  schema:
+     *                      type: string
+     *          responses:
+     *              200:
+     *                  description: Query recommendation data
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              $ref: '#/components/schemas/SearchDTO'
+     */
+    @httpGet(
+        '/:search_query',
+        param('search_query')
+            .isString()
+            .withMessage('la query debe de ser string')
+            .notEmpty()
+            .withMessage('La query no puede estar vacia')
+    )
+    public async Get(req: Request, res: Response): Promise<Response> {
+        const { search_query } = req.params
+
+        const suggestions = await this.searchService.SearchQuery(search_query)
+        const response = plainToInstance(SearchDTO, suggestions, {
             excludeExtraneousValues: true
         })
         return res.status(200).json(response)
