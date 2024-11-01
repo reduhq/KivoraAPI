@@ -19,14 +19,34 @@ export default class SearchRepository implements ISearchRepository {
     }
     public async Create(t: SearchCreateDTO): Promise<Search> {
         await this.context.zincrby('search', 1, t.text)
-        const search = { text: t.text }
+        // const search = { text: t.text }
 
+        // getting an object from algolia
+        const searchItem = await this.algoliaContext
+            .getObject({
+                indexName: 'search_index',
+                objectID: t.text
+            })
+            .catch((_e) =>
+                console.log('Buscando un registro con un ObjectId inexistente')
+            )
+
+        // Adding a register to algolia search_index
+        const searchObject = plainToInstance(Search, searchItem, {
+            excludeExtraneousValues: true
+        })
         await this.algoliaContext.saveObjects({
             indexName: 'search_index',
-            objects: [{ search_query: t.text, search_count: 1 }]
+            objects: [
+                {
+                    objectID: t.text,
+                    search_query: t.text,
+                    search_count: searchObject.search_count + 1 || 1
+                }
+            ]
         })
 
-        return plainToInstance(Search, search, {
+        return plainToInstance(Search, searchObject, {
             excludeExtraneousValues: true
         })
     }

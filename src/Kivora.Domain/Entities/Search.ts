@@ -2,5 +2,8 @@ import { Expose } from 'class-transformer'
 
 export default class Search {
     @Expose()
-    public text!: string
+    public search_query!: string
+
+    @Expose()
+    public search_count!: number
 }

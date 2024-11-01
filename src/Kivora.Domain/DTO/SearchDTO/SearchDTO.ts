@@ -7,11 +7,11 @@ import { Expose } from 'class-transformer'
  *          SearchDTO:
  *              type: object
  *              properties:
- *                  text:
+ *                  search_query:
  *                      type: string
  *                      example: ''
  */
 export default class SearchDTO {
     @Expose()
-    public text!: string
+    public search_query!: string
 }
