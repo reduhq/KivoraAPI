@@ -41,7 +41,7 @@ export default class SearchRepository implements ISearchRepository {
 
     public async Create(t: SearchCreateDTO): Promise<Search> {
         await this.context.zincrby('search', 1, t.text)
-        // const search = { text: t.text }
+        const search = { search_query: t.text }
 
         // getting an object from algolia
         const searchItem = await this.algoliaContext
@@ -50,7 +50,9 @@ export default class SearchRepository implements ISearchRepository {
                 objectID: t.text
             })
             .catch((_e) =>
-                console.log('Buscando un registro con un ObjectId inexistente')
+                console.log(
+                    'Buscando una sugerencia con un ObjectId inexistente... Creando nuevo registro de sugerencia'
+                )
             )
 
         // Adding a register to algolia search_index
@@ -63,12 +65,14 @@ export default class SearchRepository implements ISearchRepository {
                 {
                     objectID: t.text,
                     search_query: t.text,
-                    search_count: searchObject.search_count + 1 || 1
+                    search_count: searchObject
+                        ? searchObject.search_count + 1
+                        : 1
                 }
             ]
         })
 
-        return plainToInstance(Search, searchObject, {
+        return plainToInstance(Search, search, {
             excludeExtraneousValues: true
         })
     }
