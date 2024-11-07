@@ -103,7 +103,7 @@ export default class ProductController {
      *                  name: id
      *                  required: true
      *                  schema:
-     *                      type: integer
+     *                      type: string
      *          responses:
      *              200:
      *                  description: Product data
@@ -285,7 +285,7 @@ export default class ProductController {
      *              - in: path
      *                name: id
      *                schema:
-     *                  type: integer
+     *                  type: string
      *                required: true
      *                description: ID of the product or user for which recommendations are being fetched
      *          responses:
