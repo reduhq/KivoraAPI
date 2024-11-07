@@ -23,7 +23,7 @@ export default class ProductService implements IProductService {
         this.productRepository = productRepository
         this.recomendacionesCargadas = this.cargarRecomendaciones() // Inicializar la carga de las recomendaciones
     }
-    public async GetById(id: number): Promise<Product | null> {
+    public async GetById(id: string): Promise<Product | null> {
         return await this.productRepository.GetById(id)
     }
 
@@ -46,7 +46,7 @@ export default class ProductService implements IProductService {
         }
     }
 
-    public async GetRecommendedProduct(id: number): Promise<Array<Product>> {
+    public async GetRecommendedProduct(id: string): Promise<Array<Product>> {
         const n = 8
 
         // Esperar a que la matriz esté cargada antes de continuar
@@ -75,7 +75,7 @@ export default class ProductService implements IProductService {
         }
 
         // Extraer los ids2 de las recomendaciones, convertir a números y buscar los productos en la base de datos
-        const ids2 = recomendaciones.map((product) => product.id2)
+        const ids2 = recomendaciones.map((product) => product.id2.toString())
         // const ids2 = recomendaciones.map((rec) => rec.id2)
         return await this.productRepository.GetRecommendedProductInDB(ids2)
     }
@@ -99,7 +99,7 @@ export default class ProductService implements IProductService {
         t: ProductUpdateDTO
     ): Promise<Product | null> {
         // validating if the product exists
-        const product = await this.productRepository.GetById(id)
+        const product = await this.productRepository.GetById(id.toString())
         if (!product) return null
         // updating the product
         return await this.productRepository.Update(id, t)
@@ -107,7 +107,7 @@ export default class ProductService implements IProductService {
 
     public async Delete(id: number): Promise<boolean> {
         // validating if the product exists
-        const product = await this.productRepository.GetById(id)
+        const product = await this.productRepository.GetById(id.toString())
         if (!product) return false
         // deleting the product
         return this.productRepository.Delete(id)

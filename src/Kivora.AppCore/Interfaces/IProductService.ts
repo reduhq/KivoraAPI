@@ -5,11 +5,11 @@ import ProductUpdateDTO from '@Kivora.Domain/DTO/ProductDTO/ProductUpdateDTO'
 
 export default interface IProductService
     extends IService<Product, ProductCreateDTO, ProductUpdateDTO> {
-    GetRecommendedProduct(id: number): Promise<Array<Product>>
+    GetRecommendedProduct(id: string): Promise<Array<Product>>
     GetProductsByCategoryInDB(
         category: string,
         limit: number
     ): Promise<Array<Product>>
     Count(): Promise<number>
-    GetById(id: number): Promise<Product | null>
+    GetById(id: string): Promise<Product | null>
 }

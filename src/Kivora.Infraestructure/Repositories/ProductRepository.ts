@@ -44,7 +44,7 @@ export default class ProductRepository implements IProductRepository {
     }
 
     public async GetRecommendedProductInDB(
-        ids: Array<number>
+        ids: Array<string>
     ): Promise<Array<Product>> {
         try {
             // Realiza una búsqueda en la base de datos de los productos que coincidan con los ids
@@ -67,7 +67,7 @@ export default class ProductRepository implements IProductRepository {
         }
     }
 
-    public async GetById(id: number): Promise<Product | null> {
+    public async GetById(id: string): Promise<Product | null> {
         const product = await this.context.product.findFirst({
             where: {
                 id: id.toString()

@@ -122,7 +122,7 @@ export default class ProductController {
     )
     public async GetById(req: Request, res: Response): Promise<Response> {
         const { id } = req.params
-        const product = await this.productService.GetById(Number(id))
+        const product = await this.productService.GetById(id)
         const response = plainToInstance(ProductDTO, product, {
             excludeExtraneousValues: true
         })
@@ -308,9 +308,7 @@ export default class ProductController {
         res: Response
     ): Promise<Response> {
         const { id } = req.params // Obtener el 'id' desde la URL
-        const products = await this.productService.GetRecommendedProduct(
-            Number(id)
-        ) // Convertir el ID a número si es necesario
+        const products = await this.productService.GetRecommendedProduct(id) // Convertir el ID a número si es necesario
         const result = plainToInstance(Product, products)
         return res.status(200).json(result)
     }
