@@ -12,4 +12,17 @@ export default interface IProductRepository
         limit: number
     ): Promise<Array<Product>>
     Count(): Promise<number>
+    GetByQuery(
+        query: string,
+        page?: number,
+        limit?: number
+    ): Promise<{
+        data: Product[]
+        currentPage: number
+        totalPages: number
+        totalProducts: number
+        pageSize: number
+        hasNextPage: boolean
+        hasPreviousPage: boolean
+    }>
 }

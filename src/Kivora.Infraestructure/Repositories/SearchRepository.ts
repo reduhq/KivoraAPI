@@ -19,7 +19,6 @@ export default class SearchRepository implements ISearchRepository {
     }
 
     public async SearchQuery(query: string): Promise<Search[]> {
-        console.log('ohla?')
         const response: SearchResponses<Search> =
             await this.algoliaContext.search<Search>({
                 requests: [

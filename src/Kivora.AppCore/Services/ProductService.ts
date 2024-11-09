@@ -23,6 +23,22 @@ export default class ProductService implements IProductService {
         this.productRepository = productRepository
         this.recomendacionesCargadas = this.cargarRecomendaciones() // Inicializar la carga de las recomendaciones
     }
+
+    public async GetByQuery(
+        query: string,
+        page?: number,
+        limit?: number
+    ): Promise<{
+        data: Product[]
+        currentPage: number
+        totalPages: number
+        totalProducts: number
+        pageSize: number
+        hasNextPage: boolean
+        hasPreviousPage: boolean
+    }> {
+        return await this.productRepository.GetByQuery(query, page, limit)
+    }
     public async GetById(id: string): Promise<Product | null> {
         return await this.productRepository.GetById(id)
     }

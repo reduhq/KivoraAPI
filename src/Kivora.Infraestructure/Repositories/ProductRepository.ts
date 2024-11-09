@@ -1,8 +1,10 @@
+import { SearchClient } from '@algolia/client-search'
 import ProductCreateDTO from '@Kivora.Domain/DTO/ProductDTO/ProductCreateDTO'
 import ProductUpdateDTO from '@Kivora.Domain/DTO/ProductDTO/ProductUpdateDTO'
 import Product from '@Kivora.Domain/Entities/Product'
 import IProductRepository from '@Kivora.Domain/Interfaces/IProductRepository'
 import { KivoraContext } from '@Kivora.Domain/KivoraContext'
+import { algoliaClient } from '@Kivora.Infraestructure/Data/KivoraAlgoliaContext'
 import { PrismaClient } from '@prisma/client'
 import { plainToInstance } from 'class-transformer'
 import { injectable } from 'inversify'
@@ -10,9 +12,56 @@ import { injectable } from 'inversify'
 @injectable()
 export default class ProductRepository implements IProductRepository {
     private readonly context: PrismaClient
+    private readonly algoliaContext: SearchClient
 
     constructor() {
         this.context = KivoraContext
+        this.algoliaContext = algoliaClient
+    }
+
+    public async GetByQuery(
+        query: string,
+        page?: number,
+        limit?: number
+    ): Promise<{
+        data: Product[]
+        currentPage: number
+        totalPages: number
+        totalProducts: number
+        pageSize: number
+        hasNextPage: boolean
+        hasPreviousPage: boolean
+    }> {
+        const products = await this.algoliaContext.search<Product>({
+            requests: [
+                {
+                    indexName: 'product_index',
+                    query: query,
+                    hitsPerPage: limit,
+                    page: page
+                }
+            ]
+        })
+        console.log(products)
+        // return {}
+        return {
+            data: plainToInstance(
+                Product,
+                (products.results[0] as { hits: Product[] }).hits,
+                {
+                    excludeExtraneousValues: true
+                }
+            ),
+            currentPage: (products.results[0] as { page: number }).page,
+            totalPages: (products.results[0] as { nbPages: number }).nbPages,
+            totalProducts: (products.results[0] as { nbHits: number }).nbHits,
+            pageSize: (products.results[0] as { hitsPerPage: number })
+                .hitsPerPage,
+            hasNextPage:
+                (products.results[0] as { page: number }).page <
+                (products.results[0] as { nbPages: number }).nbPages,
+            hasPreviousPage: (products.results[0] as { page: number }).page > 0
+        }
     }
 
     public async Count(): Promise<number> {

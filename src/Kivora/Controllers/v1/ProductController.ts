@@ -131,6 +131,66 @@ export default class ProductController {
 
     /**
      *  @swagger
+     *  /api/v1/product/search/{query}:
+     *      get:
+     *          summary: Get a list of products by query
+     *          tags: [Product]
+     *          parameters:
+     *              -   in: path
+     *                  name: query
+     *                  required: true
+     *                  schema:
+     *                      type: string
+     *              -   in: query
+     *                  name: page
+     *                  schema:
+     *                      type: number
+     *              -   in: query
+     *                  name: limit
+     *                  schema:
+     *                      type: number
+     *          responses:
+     *              200:
+     *                  description: List of products
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              type: array
+     *                              items:
+     *                                  $ref: '#/components/schemas/ProductDTO'
+     */
+    @httpGet(
+        '/search/:query',
+        param('query')
+            .isString()
+            .withMessage('La query debe de ser tipo string')
+            .notEmpty()
+            .withMessage('La query no puede estar vacia'),
+        query('page')
+            .isNumeric()
+            .withMessage('El campo page debe ser un numero')
+            .default(0),
+        query('limit')
+            .isNumeric()
+            .withMessage('El campo Limit debe de ser un numero')
+            .default(25)
+    )
+    public async SearchProducts(
+        req: Request,
+        res: Response
+    ): Promise<Response> {
+        const { query } = req.params
+        const { page, limit } = req.query
+        const products = await this.productService.GetByQuery(
+            query,
+            Number(page),
+            Number(limit)
+        )
+        return res.status(200).json(products)
+    }
+
+    /**
+     *  @swagger
      *  /api/v1/product:
      *      post:
      *          summary: Create a new product
