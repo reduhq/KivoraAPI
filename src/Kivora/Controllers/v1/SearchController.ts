@@ -44,7 +44,31 @@ export default class SearchController {
      */
     @httpPost('/', ValidationMiddleware.body(SearchCreateDTO))
     public async Create(req: Request, res: Response): Promise<Response> {
-        const search = req.body
+        const search: SearchCreateDTO = req.body
+        const bannedWords = [
+            'porno',
+            'pornito',
+            'porn',
+            'pornografia',
+            'pornografía',
+            'sex',
+            'sexo',
+            'sexual',
+            'sexuales',
+            'xxx',
+            'pene',
+            'penito',
+            'verga',
+            'poya',
+            'polla',
+            'vagina',
+            'tetas',
+            'tetitas',
+            'tetotas'
+        ]
+        if (bannedWords.some((word) => search.text.includes(word))) {
+            return res.status(400).json(`Busqueda no apropiada: ${search.text}`)
+        }
         const searchStr = await this.searchService.Create(search)
         const response = plainToInstance(SearchDTO, searchStr, {
             excludeExtraneousValues: true
