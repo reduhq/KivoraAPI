@@ -7,6 +7,7 @@ import { plainToInstance } from 'class-transformer'
 import UserCreateDTO from '../../Kivora.Domain/DTO/UserDTO/UserCreateDTO'
 import UserUpdateDTO from '../../Kivora.Domain/DTO/UserDTO/UserUpdateDTO'
 import { ROLE } from '@Kivora.Domain/Enums/ROLE'
+import { randomUUID } from 'crypto'
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -88,7 +89,7 @@ export default class UserRepository implements IUserRepository {
     public async Create(t: UserCreateDTO, role?: ROLE): Promise<User> {
         const userResponse = await this.context.user.create({
             data: {
-                id: 'DELETE THIS FIELD',
+                id: randomUUID(),
                 username: t.username,
                 password: t.password,
                 email: t.email,
